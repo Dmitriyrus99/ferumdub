@@ -1,0 +1,28 @@
+# ======== Development Tools ========
+# These dependencies are used for code linting, formatting, and quality checks.
+# They are not required for the runtime operation of the ferum_customs app itself
+# within a Frappe/ERPNext environment but are recommended for development.
+
+# --- Linters and Formatters ---
+black == 23.3.0
+ruff == 0.0.270
+# flake8  # Раскомментируйте, если все еще используете Flake8 наряду с Ruff
+pre-commit # Раскомментируйте, если используете pre-commit хуки для автоматизации проверок
+
+# --- Testing ---
+coverage # Раскомментируйте, если используете coverage.py для измерения покрытия тестами
+
+# --- Security & Dependency Auditing (Recommended for development) ---
+pip-audit # Для проверки зависимостей на известные уязвимости (требует отдельной установки и запуска)
+safety    # Альтернатива pip-audit для проверки зависимостей
+
+# ======== Runtime Dependencies ========
+# List any Python packages that are DIRECTLY imported by your ferum_customs app
+# and are NOT part of the standard Python library or Frappe/ERPNext.
+# Example:
+# requests==2.28.1
+# beautifulsoup4==4.11.1
+
+# На данный момент, судя по анализу кода, у приложения ferum_customs
+# нет явных внешних Python runtime-зависимостей, не входящих в состав Frappe.
+# Frappe и ERPNext НЕ должны быть здесь перечислены, так как они управляются средой bench.
