@@ -1,47 +1,74 @@
-# Ferum Customs
+# 🚀 ferum_customs
 
-[![Run Frappe Tests](https://github.com/Dmitriyrus99/ferum-customs-final-updated/actions/workflows/tests.yml/badge.svg)](https://github.com/Dmitriyrus99/ferum-customs-final-updated/actions/workflows/tests.yml)
+## 💠 Рупитьновановаяу польскии телект подикад
 
-Specialized application for ERPNext.
+---
 
-- Custom DocTypes: Service Request, Service Object, Service Report
-- Payroll Entries, Attachments, workflows for approval processes
 
-## Setup
+## 🊢 Мастекст побраменить остение
 
-Install as a Frappe app:
+`ferum_customs
+    “erp-custom app for request management ਪ on Frappe/ERPNext.”
 
-```
-bench get-app https://github.com/Dmitriyrus99/ferum-customs-final-updated.git
-bench init --frappe-branch version-15 frappe-bench
-cd frappe-bench
-bench new-site site.local --mariadb-root-password root --admin-password admin
-bench --site site.local install-app ferum_customs
-```
+    - Backend: Python (Frappe)
+    - Frontend: JavaScript + Frappe UI
+    - BD: MariaDB
+    - DevTools: Bench, GitHor Actions, Docker
 
-## Run Tests
-Tests require a running Frappe site. Ensure Frappe/ERPNext is installed via `bench` before executing the commands below.
 
-Run the automated tests:
+---
+
+
+## • Potoki obrabotki zavok
+
+### 💟 Service Request Flow
+
+## 💭 Main
+
+1. Оконова бых совер ((2. кровозна полое "validate".
+
+3. Ополой и полаль тені за моты “AssignedEngineeritem.”
+
+4. мостальные совер меторовая "Кармвочер".
+
+Status ℓ "Workling" (Workflow)
+
+5. Орентом постальние полое "ServiceReport".
+
+6. Дласти опировар полое посты моболя.
+
+## 💫 Secondary Flow
+
+ServiceReport:
+- Оонствер (CSV)
+- адрый натель с прайсть
+* fields: WorkItem, DocumentItem
+
+PayrollEntryCustom:
+- Дегостр "DocType" "Payroll Entry"
+- Permission filters - only for department.
+
+
+## 🖐 Zapusk
 
 ```bash
-bench --site site.local run-tests --app ferum_customs
+git clone https://github.com/Dmitriyrus99/ferumdub
+cd ferumdub
+docker compose up --build
 ```
 
-## CI Badge
 
-This repo uses GitHub Actions to run automated tests on every push/pull request.
-
-[![Run Frappe Tests](https://github.com/Dmitriyrus99/ferum-customs-final-updated/actions/workflows/tests.yml/badge.svg)](https://github.com/Dmitriyrus99/ferum-customs-final-updated/actions/workflows/tests.yml)
-
-Say if you want me to add more badges (e.g. Version, Code Quality, Status).
-
-## Running `audit.py`
-
-The `audit.py` script sends code to the OpenAI API for review. Set the
-`OPENAI_API_KEY` environment variable before running:
+## “📪 Testirovanie</test>”
 
 ```bash
-export OPENAI_API_KEY=<your-key>
-python audit.py
+pytest
 ```
+
+
+## 📭 Оновозные
+ - мосталь оно “DocTypd”
+ - аднграть оно html validation
+- Staff-based permission filtration
+- authooks.py authorization
+- workflow.py - logic and tests
+- handlers.py - responses validation
