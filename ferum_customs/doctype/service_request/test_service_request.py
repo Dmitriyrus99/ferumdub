@@ -2,8 +2,7 @@
 import pytest; pytest.importorskip("frappe") # noqa: E402,F401
 import frappe # noqa: F401
 import unittest
-from unittest.mock import patch # Для мокирования frappe.sendmail
-import re
+from unittest.mock import patch  # Для мокирования frappe.sendmail
 from frappe.utils import now_datetime, add_days, today, get_first_day, get_last_day
 
 # Импортируйте ваши константы

@@ -7,8 +7,7 @@ from __future__ import annotations
 from typing import Dict, List, Union, Optional 
 
 import frappe
-from frappe import _ 
-from ..constants import ROLE_ADMINISTRATOR, ROLE_ZAKAZCHIK 
+from ..constants import ROLE_ZAKAZCHIK
 
 PQCConditionValue = Union[str, List[Union[str, List[str]]], Dict[str, str]]
 PQCConditions = Dict[str, PQCConditionValue]

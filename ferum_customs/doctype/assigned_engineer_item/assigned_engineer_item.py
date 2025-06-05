@@ -10,7 +10,6 @@ import datetime # Для работы с датами и временем
 
 import frappe
 from frappe.model.document import Document
-from frappe import _ # Для возможных пользовательских сообщений
 
 if TYPE_CHECKING:
     # from frappe.types import DF # Для типов полей DocField
