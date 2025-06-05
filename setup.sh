@@ -6,13 +6,6 @@ echo "🔧 Создание виртуального окружения..."
 python3 -m venv venv
 source venv/bin/activate
 
-echo "📦 Установка зависимостей..."
-pip install -r requirements.txt
-pip install -r dev-requirements.txt
-pip install pytest black ruff openai
-
-echo "🧱 Установка frappe-bench..."
-pip install frappe-bench
 bench init frappe-bench --frappe-branch version-14 --no-redis --no-backups --skip-assets
 
 echo "📁 Подключение проекта..."
