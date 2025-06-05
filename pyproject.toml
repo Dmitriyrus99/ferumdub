@@ -17,3 +17,6 @@ requires-python = ">=3.10"
 
 [tool.bench]
 app_name = "ferum_customs"
+
+[tool.ruff]
+line-length = 200
