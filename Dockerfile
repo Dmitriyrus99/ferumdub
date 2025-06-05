@@ -1,12 +1,13 @@
-FROM python:3.10-slim
+FROM  python:3.10-slim
 
 RUN apt-get update && apt-get install -y git mariadb-client redis-server nodejs npm yarn curl
 
 WORKDIR /home/frappe
 
-# Add frappe user and group / nege esnsovan maten
-exec getent group frappe || addgroup frappe && echo "group added || exit 0" && exec id -u frappe || adduser --disabled-password --gecos "" frappe && usermod -aG
-frappe frappe
+# Add frappe user and group
+RUN addgroup frappe
+RUN adduser --disabled-password --gecos "" frappe
+RUN adduser frappe frappe
 
 USER frappe
 
