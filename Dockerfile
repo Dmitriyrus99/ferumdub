@@ -11,6 +11,8 @@ RUN adduser frappe frappe
 
 USER frappe
 
+RUN pip install frappe-bench
+
 RUN mkdir -p /home/frappe
 WORKDIR /home/frappe
 WORKDIR /home/frappe/frappe-bench
