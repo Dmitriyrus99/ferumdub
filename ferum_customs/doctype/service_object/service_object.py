@@ -3,15 +3,18 @@
 Python-контроллер для DocType "ServiceObject".
 """
 from __future__ import annotations
+
 # from typing import TYPE_CHECKING
 
 from frappe.model.document import Document
+
 # from frappe import _ # Если будут пользовательские сообщения
 
 # if TYPE_CHECKING:
-    # from ..service_project.service_project import ServiceProject # Пример
-    # from .assigned_engineer_item import AssignedEngineerItem # Для дочерней таблицы
-    # pass
+# from ..service_project.service_project import ServiceProject # Пример
+# from .assigned_engineer_item import AssignedEngineerItem # Для дочерней таблицы
+# pass
+
 
 class ServiceObject(Document):
     """
@@ -32,7 +35,7 @@ class ServiceObject(Document):
         # if self.get("warranty_expiry_date") and self.get("purchase_date"):
         #     if self.warranty_expiry_date < self.purchase_date:
         #         frappe.throw(_("Дата окончания гарантии не может быть раньше даты покупки."))
-        
+
         # Логика из оригинального файла (service_object.py):
         # if self.linked_service_project:
         #     self.linked_service_project = self.linked_service_project.strip()
@@ -47,7 +50,9 @@ class ServiceObject(Document):
         # Если 'linked_service_project' - это Data поле, то strip() имеет смысл.
         # Предположим, что это Link, поэтому strip() здесь может быть излишним,
         # но оставлен для соответствия оригинальному коду, если там была причина.
-        if self.get("linked_service_project") and isinstance(self.linked_service_project, str):
+        if self.get("linked_service_project") and isinstance(
+            self.linked_service_project, str
+        ):
             self.linked_service_project = self.linked_service_project.strip()
 
         # TODO: Verify fieldname 'object_name' or similar descriptive field

@@ -1,6 +1,9 @@
-import pytest; pytest.importorskip("frappe")
+import pytest
+
+pytest.importorskip("frappe")
 import frappe
 import unittest
+
 
 class TestAssignedEngineerItem(unittest.TestCase):
     def test_assignment_date_format(self):

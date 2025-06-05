@@ -1,6 +1,9 @@
-import pytest; pytest.importorskip("frappe")
+import pytest
+
+pytest.importorskip("frappe")
 import frappe
 import unittest
+
 
 class TestProjectObjectItem(unittest.TestCase):
     def test_description_trim(self):

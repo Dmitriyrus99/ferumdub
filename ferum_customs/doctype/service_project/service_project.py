@@ -3,18 +3,20 @@
 Python-контроллер для DocType "ServiceProject".
 """
 from __future__ import annotations
+
 # from typing import TYPE_CHECKING
-import datetime # Для работы с датами и временем
+import datetime  # Для работы с датами и временем
 
 import frappe
 from frappe.model.document import Document
 from frappe import _
 
 # if TYPE_CHECKING:
-    # from .project_object_item import ProjectObjectItem # Для дочерней таблицы
-    # pass
+# from .project_object_item import ProjectObjectItem # Для дочерней таблицы
+# pass
 
-class ServiceProject(Document): # Имя класса в CamelCase
+
+class ServiceProject(Document):  # Имя класса в CamelCase
     """
     Класс документа ServiceProject.
     """
@@ -24,7 +26,7 @@ class ServiceProject(Document): # Имя класса в CamelCase
         Валидация данных документа.
         """
         self._validate_dates()
-        self._format_dates_to_iso() # Форматируем после валидации, чтобы валидация работала с объектами дат
+        self._format_dates_to_iso()  # Форматируем после валидации, чтобы валидация работала с объектами дат
 
         # Логика из оригинального файла (service_project.py):
         # if self.start_date and self.end_date:
@@ -35,7 +37,6 @@ class ServiceProject(Document): # Имя класса в CamelCase
         # if self.end_date:
         #     self.end_date = self.end_date.isoformat()
         # Эта логика теперь в _validate_dates() и _format_dates_to_iso()
-
 
     def _validate_dates(self) -> None:
         """
@@ -58,8 +59,11 @@ class ServiceProject(Document): # Имя класса в CamelCase
 
                 if end_dt < start_dt:
                     frappe.throw(
-                        _("Дата окончания проекта ({0}) не может быть раньше даты начала ({1}).").format(
-                            frappe.utils.formatdate(end_dt), frappe.utils.formatdate(start_dt)
+                        _(
+                            "Дата окончания проекта ({0}) не может быть раньше даты начала ({1})."
+                        ).format(
+                            frappe.utils.formatdate(end_dt),
+                            frappe.utils.formatdate(start_dt),
                         )
                     )
             except Exception as e:
@@ -70,12 +74,11 @@ class ServiceProject(Document): # Имя класса в CamelCase
                 # Можно выбросить ошибку, если формат дат критичен на этом этапе
                 # frappe.throw(_("Некорректный формат даты начала или окончания проекта."))
 
-
     def _format_dates_to_iso(self) -> None:
         """
         Форматирует поля дат в ISO формат, если они установлены и являются объектами date/datetime.
         """
-        date_fields = ["start_date", "end_date"] # TODO: Verify fieldnames
+        date_fields = ["start_date", "end_date"]  # TODO: Verify fieldnames
         for fieldname in date_fields:
             field_value = self.get(fieldname)
             if field_value and not isinstance(field_value, str):
@@ -83,16 +86,25 @@ class ServiceProject(Document): # Имя класса в CamelCase
                     try:
                         setattr(self, fieldname, field_value.isoformat())
                     except Exception as e:
-                        frappe.logger(__name__).error(f"Error converting date field '{fieldname}' to ISO format for ServiceProject '{self.name}': {e}")
+                        frappe.logger(__name__).error(
+                            f"Error converting date field '{fieldname}' to ISO format for ServiceProject '{self.name}': {e}"
+                        )
                 # else: уже обработано not isinstance(str)
             elif isinstance(field_value, str):
                 # Если это уже строка, можно попытаться нормализовать (если нужно).
                 # Оригинальный код делал isoformat() без проверки, что вызвало бы ошибку.
                 try:
-                    dt_obj = frappe.utils.get_datetime(field_value) # или get_date
-                    setattr(self, fieldname, dt_obj.date().isoformat() if isinstance(dt_obj, datetime.datetime) else dt_obj.isoformat())
+                    dt_obj = frappe.utils.get_datetime(field_value)  # или get_date
+                    setattr(
+                        self,
+                        fieldname,
+                        (
+                            dt_obj.date().isoformat()
+                            if isinstance(dt_obj, datetime.datetime)
+                            else dt_obj.isoformat()
+                        ),
+                    )
                 except Exception:
-                     pass # Оставляем как есть, если не парсится или уже в нужном формате
-
+                    pass  # Оставляем как есть, если не парсится или уже в нужном формате
 
     # Другие методы могут быть добавлены по необходимости.

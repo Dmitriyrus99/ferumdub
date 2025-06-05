@@ -1,6 +1,6 @@
 # 😌  SECURITY.md
 
-## “Базанованнный каднать клекто иминыа некстверать оспервой FerumCustoms”.
+## Security Overview
 
 ### Structural Security
 
@@ -20,4 +20,5 @@
 ### Restrictions
 - No secret config in repos
 - Recommend to add .env to .gitignore
-- Enable SMTS/SSL when deploying
+- Enable SMTPS/SSL when deploying
+

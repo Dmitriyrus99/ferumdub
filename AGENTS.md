@@ -22,6 +22,7 @@ This document helps clarify the roles and responsibilities of automated modules 
  | Test Agent | Executes module tests. Resides in *test_api.py* and *tests/* |
  | Util Agent | Stores utilities and common functions. Source: *utils/* |
 
+| Precommit Agent | Runs formatting and linting via pre-commit hooks defined in .pre-commit-config.yaml |
 You can extend these agents with own roles as new features are added to the system.
 
 ### “Project Structure supported”

@@ -19,6 +19,7 @@ if TYPE_CHECKING:
     # Замените на корректные пути к вашим DocType, если необходимо
     from ..doctype.service_report.service_report import ServiceReport
     from ..doctype.service_request.service_request import ServiceRequest
+
     # from frappe.model.document import Document # Общий тип для документов
     # ServiceReport = Document
     # ServiceRequest = Document
@@ -26,6 +27,7 @@ if TYPE_CHECKING:
 # --------------------------------------------------------------------------- #
 #                           DocType events                                    #
 # --------------------------------------------------------------------------- #
+
 
 def validate(doc: "ServiceReport", method: str | None = None) -> None:
     """
@@ -40,37 +42,44 @@ def validate(doc: "ServiceReport", method: str | None = None) -> None:
         frappe.ValidationError: Если нарушены бизнес-правила.
     """
     if not doc.service_request:
-        frappe.throw(_("Не выбрана связанная заявка на обслуживание (Service Request)."))
+        frappe.throw(
+            _("Не выбрана связанная заявка на обслуживание (Service Request).")
+        )
 
     # Проверяем, существует ли такая заявка, чтобы избежать ошибок при get_value
     if not frappe.db.exists("ServiceRequest", doc.service_request):
         frappe.throw(
-            _("Связанная заявка на обслуживание (Service Request) '{0}' не найдена.").format(doc.service_request)
+            _(
+                "Связанная заявка на обслуживание (Service Request) '{0}' не найдена."
+            ).format(doc.service_request)
         )
 
     # TODO: Verify fieldname 'status' in ServiceRequest DocType JSON
     req_status = frappe.db.get_value("ServiceRequest", doc.service_request, "status")
-    
+
     if req_status is None:
         # Этого не должно произойти, если frappe.db.exists прошло, но для надежности
         frappe.logger(__name__).error(
             f"Could not retrieve status for ServiceRequest '{doc.service_request}' linked to ServiceReport '{doc.name}'."
         )
         frappe.throw(
-            _("Не удалось получить статус для связанной заявки на обслуживание '{0}'. Обратитесь к администратору.").format(doc.service_request)
+            _(
+                "Не удалось получить статус для связанной заявки на обслуживание '{0}'. Обратитесь к администратору."
+            ).format(doc.service_request)
         )
 
     if req_status != STATUS_VYPOLNENA:
         frappe.throw(
-            _("Отчёт можно привязать только к заявке в статусе «{0}». Текущий статус заявки «{1}».").format(
-                STATUS_VYPOLNENA, req_status
-            )
+            _(
+                "Отчёт можно привязать только к заявке в статусе «{0}». Текущий статус заявки «{1}»."
+            ).format(STATUS_VYPOLNENA, req_status)
         )
-    
+
     # Сюда можно добавить дополнительные проверки содержимого отчёта, если необходимо.
     # Например, что все обязательные поля в самом отчете заполнены.
     # if not doc.get("work_done_summary"): # Пример
     #     frappe.throw(_("Поле 'Описание выполненных работ' в отчете обязательно для заполнения."))
+
 
 def on_submit(doc: "ServiceReport", method: str | None = None) -> None:
     """
@@ -95,15 +104,18 @@ def on_submit(doc: "ServiceReport", method: str | None = None) -> None:
 
     try:
         # TODO: Verify fieldname 'linked_report' in ServiceRequest DocType JSON
-        REPORT_LINK_FIELD_ON_REQUEST = "linked_report" 
-        
+        REPORT_LINK_FIELD_ON_REQUEST = "linked_report"
+
         req: "ServiceRequest" = frappe.get_doc("ServiceRequest", doc.service_request)
-        
+
         changed_fields = {}
 
-        if not req.get(REPORT_LINK_FIELD_ON_REQUEST) or req.get(REPORT_LINK_FIELD_ON_REQUEST) != doc.name:
+        if (
+            not req.get(REPORT_LINK_FIELD_ON_REQUEST)
+            or req.get(REPORT_LINK_FIELD_ON_REQUEST) != doc.name
+        ):
             changed_fields[REPORT_LINK_FIELD_ON_REQUEST] = doc.name
-        
+
         # Этот блок является дополнительной защитой.
         # `validate` должен был уже обеспечить, что статус `STATUS_VYPOLNENA`.
         if req.status != STATUS_VYPOLNENA:
@@ -121,12 +133,14 @@ def on_submit(doc: "ServiceReport", method: str | None = None) -> None:
             # Альтернативно, если нужны хуки ServiceRequest (кроме on_submit/on_update):
             for field, value in changed_fields.items():
                 req.set(field, value)
-            req.save(ignore_permissions=True) # Сохраняем изменения в ServiceRequest.
-            
+            req.save(ignore_permissions=True)  # Сохраняем изменения в ServiceRequest.
+
             frappe.msgprint(
-                _("Связанная заявка на обслуживание {0} была обновлена.").format(req.name),
+                _("Связанная заявка на обслуживание {0} была обновлена.").format(
+                    req.name
+                ),
                 indicator="green",
-                alert=True
+                alert=True,
             )
             frappe.logger(__name__).info(
                 f"ServiceRequest '{req.name}' updated from ServiceReport '{doc.name}'. Changes: {changed_fields}"
@@ -135,14 +149,17 @@ def on_submit(doc: "ServiceReport", method: str | None = None) -> None:
     except frappe.DoesNotExistError:
         frappe.logger(__name__).error(
             f"ServiceRequest '{doc.service_request}' linked in ServiceReport '{doc.name}' not found during on_submit.",
-            exc_info=True
+            exc_info=True,
         )
         # Можно рассмотреть frappe.throw, если это критическая ошибка
     except Exception as e:
         frappe.logger(__name__).error(
             f"Error updating linked ServiceRequest '{doc.service_request}' from ServiceReport '{doc.name}': {e}",
-            exc_info=True
+            exc_info=True,
         )
         frappe.throw(
-            _("Произошла ошибка при обновлении связанной заявки на обслуживание. Обратитесь к администратору.")
+            _(
+                "Произошла ошибка при обновлении связанной заявки на обслуживание. Обратитесь к администратору."
+            )
         )
+

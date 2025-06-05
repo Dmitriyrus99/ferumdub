@@ -4,6 +4,7 @@
 # import frappe
 from frappe.model.document import Document
 
+
 class ServiceReportWorkItem(Document):
     # Эта строка (pass) означает, что в этом классе нет специфической логики.
     # Frappe будет использовать стандартное поведение для дочерних документов.

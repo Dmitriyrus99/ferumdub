@@ -1,6 +1,6 @@
 # Ferum Customs
 
-[!Run Frappe Tests](https://github.com/Dmitriyrus99/ferum-customs-final-updated/actions/workflows/tests.yml/badge.svg
+[![Run Frappe Tests](https://github.com/Dmitriyrus99/ferum-customs-final-updated/actions/workflows/tests.yml/badge.svg)](https://github.com/Dmitriyrus99/ferum-customs-final-updated/actions/workflows/tests.yml)
 
 Specialized application for ERPNext.
 
@@ -20,6 +20,7 @@ bench --site site.local install-app ferum_customs
 ```
 
 ## Run Tests
+Tests require a running Frappe site. Ensure Frappe/ERPNext is installed via `bench` before executing the commands below.
 
 Run the automated tests:
 
@@ -31,7 +32,7 @@ bench --site site.local run-tests --app ferum_customs
 
 This repo uses GitHub Actions to run automated tests on every push/pull request.
 
-[!Run Frappe Tests](https://github.com/Dmitriyrus99/ferum-customs-final-updated/actions/workflows/tests.yml/badge.svg
+[![Run Frappe Tests](https://github.com/Dmitriyrus99/ferum-customs-final-updated/actions/workflows/tests.yml/badge.svg)](https://github.com/Dmitriyrus99/ferum-customs-final-updated/actions/workflows/tests.yml)
 
 Say if you want me to add more badges (e.g. Version, Code Quality, Status).
 
