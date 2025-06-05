@@ -29,7 +29,7 @@ services:
   frontend:
     image: frappe/frontend
     ports: 
-      - "80x80"
+      - "80:80"
 
 volumes: 
   mariadb:
