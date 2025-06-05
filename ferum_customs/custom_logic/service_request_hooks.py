@@ -184,8 +184,11 @@ def _notify_project_manager(doc: "ServiceRequest") -> None:
 
         link_to_request = frappe.utils.get_link_to_form("ServiceRequest", doc.name)
 
-        message = f"""<p>{message_body.replace("\n", "<br>")}</p>
-<p><a href='{link_to_request}'>{_('Просмотреть заявку на обслуживание')}</a></p>"""
+        message = "<p>{}</p><p><a href='{}'>{}</a></p>".format(
+            message_body.replace("\n", "<br>"),
+            link_to_request,
+            _("Просмотреть заявку на обслуживание"),
+        )
 
         frappe.sendmail(
             recipients=recipients,
@@ -204,4 +207,3 @@ def _notify_project_manager(doc: "ServiceRequest") -> None:
             f"Failed to send closure notification for ServiceRequest '{doc.name}': {e}",
             exc_info=True,
         )
-
