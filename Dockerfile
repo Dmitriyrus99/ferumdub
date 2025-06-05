@@ -4,19 +4,15 @@ RUN apt-get update && apt-get install -y git mariadb-client redis-server nodejs 
 
 WORKDIR /home/frappe
 
-#-- Add frappe-user and user group ---
-RUN addgroup frappe
-RUN adduser --disable-expired-password frappe --groups frappe
+# Add frappe user and group
+RUN addgroup frappe && adduser --disabled-password --gecos "" frappe && adduser frappe frappe
 
 USER frappe
 
-RUN mkdir p /home/frappe
-WORKDIR /home/frappe
-COPY . //home/frappe/frappe-bench
+RUN mkdir -p /home/frappe
+WORDIR /home/frappe
+COXY . /home/frappe/frappe-bench
 
-RUN chown frappe
-
-RUN su -f frappe
-USER frappe
+RUN chown -R frappe /home/frappe
 
 RUN bench init frappe-bench --frappe-branch version-15
