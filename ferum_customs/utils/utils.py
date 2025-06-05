@@ -51,8 +51,6 @@ def get_engineers_for_service_object(service_object_name: str) -> List[str]:
 
     engineers: List[str] = []
     try:
-        # TODO: Verify DocType name 'ServiceObject' and child table fieldname 'assigned_engineers'
-        # TODO: Verify fieldname 'engineer' in child table 'AssignedEngineerItem' (linked to User)
         if not frappe.db.exists("ServiceObject", service_object_name):
             frappe.logger(__name__).info(
                 f"ServiceObject '{service_object_name}' not found in `get_engineers_for_service_object` from utils."

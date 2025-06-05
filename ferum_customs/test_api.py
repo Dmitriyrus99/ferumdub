@@ -1,3 +1,6 @@
+import pytest
+
+pytest.importorskip("frappe")
 from ferum_customs import api
 
 

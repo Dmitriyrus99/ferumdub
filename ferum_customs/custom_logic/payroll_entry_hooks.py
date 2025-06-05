@@ -25,7 +25,6 @@ def validate(doc: "PayrollEntryCustom", method: str | None = None) -> None:
     Raises:
         frappe.ValidationError: Если дата окончания раньше даты начала.
     """
-    # TODO: Verify fieldnames 'start_date' and 'end_date' exist in PayrollEntryCustom DocType JSON
     if doc.get("start_date") and doc.get("end_date"):
         if doc.end_date < doc.start_date:
             frappe.throw(
@@ -59,21 +58,21 @@ def before_save(doc: "PayrollEntryCustom", method: str | None = None) -> None:
     # frappe.logger(__name__).debug(f"Attempting to calculate total_payable for {doc.name}")
 
     # total_bonus_from_reports = 0.0
-    # base_salary = doc.get("base_salary", 0.0) # TODO: Verify fieldname 'base_salary'
-    # total_deduction = doc.get("total_deduction", 0.0) # TODO: Verify fieldname 'total_deduction'
+    # base_salary = doc.get("base_salary", 0.0)
+    # total_deduction = doc.get("total_deduction", 0.0)
 
     # if doc.employee and doc.start_date and doc.end_date:
     #     try:
     #         service_reports = frappe.get_all(
     #             "ServiceReport", # Используйте корректное имя DocType Service Report
     #             filters={
-    #                 "employee": doc.employee, # TODO: Verify fieldname 'employee' in ServiceReport
+    #                 "employee": doc.employee
     #                 "posting_date": ["between", [doc.start_date, doc.end_date]],
     #                 "docstatus": 1 # Обычно учитываются только подтвержденные отчеты
     #                 # Возможно, потребуется дополнительный фильтр, связывающий отчет с этим PayrollEntryCustom
     #                 # "custom_payroll_entry_ref": doc.name,
     #             },
-    #             fields=["custom_bonus_amount"] # TODO: Verify fieldname 'custom_bonus_amount' in ServiceReport
+    #             fields=["custom_bonus_amount"]
     #         )
     #         for report in service_reports:
     #             total_bonus_from_reports += report.get("custom_bonus_amount", 0.0)
@@ -95,7 +94,6 @@ def before_save(doc: "PayrollEntryCustom", method: str | None = None) -> None:
 
     # Временное сообщение-заглушка для разработчика
     # Показываем сообщение один раз за сессию для этого документа, чтобы не спамить
-    # TODO: Verify fieldname 'total_payable' exists in PayrollEntryCustom DocType JSON
     session_flag_key = f"developer_msg_payroll_calc_{doc.name or frappe.generate_hash()}"  # generate_hash для новых доков
     if not frappe.flags.get(session_flag_key):
         frappe.msgprint(

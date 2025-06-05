@@ -22,8 +22,6 @@ STATUS_CANCELLED: str = "Cancelled"
 STATUS_REJECTED: str = "Rejected"
 
 # Русскоязычные варианты (основные для UI и бизнес-логики в данном приложении)
-# TODO: Согласовать эти статусы с tatsächlich используемыми в ServiceRequest Workflow
-# и в других частях системы (например, service_report_hooks.py использует STATUS_VYPOLNENA)
 STATUS_OTKRYTA: str = "Открыта"  # Соответствует "Open" или начальному статусу
 STATUS_V_RABOTE: str = "В работе"  # Соответствует "In Progress" / "Working"
 STATUS_VYPOLNENA: str = (
@@ -47,14 +45,12 @@ ROLE_SERVICE_ENGINEER: str = "Service Engineer"  # Пример
 ROLE_CUSTOMER: str = "Customer"  # Пример
 
 # Русскоязычные варианты (основные для UI и бизнес-логики)
-# TODO: Согласовать с tatsächlich используемыми ролями (см. fixtures/role.json)
 ROLE_PROEKTNYJ_MENEDZHER: str = "Проектный менеджер"  # Из fixtures/role.json
 ROLE_INZHENER: str = "Инженер"  # Из fixtures/role.json
 ROLE_ZAKAZCHIK: str = "Заказчик"  # Из fixtures/role.json
 
 
 # --- Типы вложений (CustomAttachment) ---
-# TODO: Согласовать с опциями поля 'attachment_type' в DocType CustomAttachment
 ATTACHMENT_TYPE_PHOTO: str = "photo"
 ATTACHMENT_TYPE_DOCUMENT: str = "document"
 ATTACHMENT_TYPE_OTHER: str = "other"

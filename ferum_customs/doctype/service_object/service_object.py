@@ -31,7 +31,6 @@ class ServiceObject(Document):
         self._clean_fields()
 
         # Пример дополнительной валидации:
-        # TODO: Verify fieldname 'warranty_expiry_date' and 'purchase_date'
         # if self.get("warranty_expiry_date") and self.get("purchase_date"):
         #     if self.warranty_expiry_date < self.purchase_date:
         #         frappe.throw(_("Дата окончания гарантии не может быть раньше даты покупки."))
@@ -45,7 +44,6 @@ class ServiceObject(Document):
         """
         Очистка строковых полей.
         """
-        # TODO: Verify fieldname 'linked_service_project'
         # Поля типа Link обычно не требуют strip(), так как хранят ID.
         # Если 'linked_service_project' - это Data поле, то strip() имеет смысл.
         # Предположим, что это Link, поэтому strip() здесь может быть излишним,
@@ -55,7 +53,6 @@ class ServiceObject(Document):
         ):
             self.linked_service_project = self.linked_service_project.strip()
 
-        # TODO: Verify fieldname 'object_name' or similar descriptive field
         # if self.get("object_name"):
         #     self.object_name = self.object_name.strip()
         pass

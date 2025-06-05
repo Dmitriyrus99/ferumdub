@@ -27,7 +27,6 @@ def validate(doc: "ServiceObject", method: str | None = None) -> None:
     Raises:
         frappe.ValidationError: Если серийный номер не уникален.
     """
-    # TODO: Verify fieldname 'serial_no' exists in ServiceObject DocType JSON
     if doc.get("serial_no"):
         # Удаляем возможные пробелы по краям перед проверкой
         serial_no_cleaned = doc.serial_no.strip()

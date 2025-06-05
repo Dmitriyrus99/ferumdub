@@ -39,7 +39,6 @@ class ProjectObjectItem(
         """
         Очищает поле описания.
         """
-        # TODO: Verify fieldname 'description' (Small Text или Text)
         if self.get("description") and isinstance(self.description, str):
             self.description = self.description.strip()
 

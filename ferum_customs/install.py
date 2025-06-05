@@ -30,7 +30,6 @@ def after_install() -> None:
     # Оставляем для примера, но рекомендуется использовать фикстуры.
 
     # Список ролей для создания (должен совпадать с constants.py и fixtures/role.json)
-    # TODO: Согласовать с fixtures/role.json и constants.py
     custom_roles = ["Проектный менеджер", "Офис-менеджер", "Инженер", "Заказчик"]
 
     existing_roles = {d.name for d in frappe.get_all("Role", fields=["name"])}

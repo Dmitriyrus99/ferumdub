@@ -54,7 +54,6 @@ def validate(doc: "ServiceReport", method: str | None = None) -> None:
             ).format(doc.service_request)
         )
 
-    # TODO: Verify fieldname 'status' in ServiceRequest DocType JSON
     req_status = frappe.db.get_value("ServiceRequest", doc.service_request, "status")
 
     if req_status is None:
@@ -103,7 +102,6 @@ def on_submit(doc: "ServiceReport", method: str | None = None) -> None:
         return
 
     try:
-        # TODO: Verify fieldname 'linked_report' in ServiceRequest DocType JSON
         REPORT_LINK_FIELD_ON_REQUEST = "linked_report"
 
         req: "ServiceRequest" = frappe.get_doc("ServiceRequest", doc.service_request)
@@ -121,10 +119,9 @@ def on_submit(doc: "ServiceReport", method: str | None = None) -> None:
         if req.status != STATUS_VYPOLNENA:
             changed_fields["status"] = STATUS_VYPOLNENA
             # Если вы также хотите обновить дату выполнения ServiceRequest здесь:
-            # TODO: Verify fieldname 'completed_on' in ServiceRequest DocType JSON
             # if req.meta.has_field("completed_on") and not req.get("completed_on"):
-            #    from frappe.utils import now
-            #    changed_fields["completed_on"] = now()
+            #     from frappe.utils import now
+            #     changed_fields["completed_on"] = now()
 
         if changed_fields:
             # Обновляем поля без вызова save(), чтобы избежать рекурсивных хуков и воркфлоу, если не требуется
