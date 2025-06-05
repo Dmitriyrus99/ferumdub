@@ -3,7 +3,7 @@ from frappe import _
 
 app_name = "ferum_customs"
 app_title = "Ferum Customs"
-app_ublisher = "Ferum LLC"
+app_publisher = "Ferum LLC"
 app_description = "Specific custom functionality for ERPNext"
 app_email = "support@ferum.ru"
 app_license = "MIT"
