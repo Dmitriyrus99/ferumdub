@@ -1,29 +1,35 @@
-version: "3.7"
+version: "3"
 
-services:
-  db:
+services: 
+  mariadb:
     image: mariadb:10.6
-    restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
-    ports:
-      - "3306:3306"
+      MYSQL/ROOT_PASSWORD: root
     volumes:
-      - db_data::/var/lib/mysql
+      - mariadb:/var/lib/mysql
+
+  redis:
+    image: redis:latest
 
   frappe:
     build: .
-    depends_on:
-      - db     
+    command: bench start
     ports:
       - "8000:8000"
+    depends_on:
+      - mariadb
+      - redis
     environment:
-      SITE_NAME: dev.localhost
+      SITE_NAME: your-site-name
+      DF_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: root
       ADMIN_PASSWORD: admin
-      DB_ROOT_PASSWORD: root
-    volumes:
-      - .:/workspace
-    command: ["bash", "/workspace/entrypoint.sh"]
+      INSTALL_APPS: erpnext,ferum_customs
 
-volumes:
-  db_data:
+  frontend:
+    image: frappe/frontend:
+    ports: - "80"
+
+volumes: 
+  mariadb: 
+  redis: 
