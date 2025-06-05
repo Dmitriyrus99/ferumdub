@@ -2,7 +2,7 @@ FROM python:3.10-slim
 
 RUN apt-get update && apt-get install -y git mariadb-client redis-server nodejs npm yarn curl
 
-WORKDIR /home/frappe
+WORKDIR /home/frappe/frappe-bench
 
 RUN addgroup frappe && adduser --disabled-password --gecos "" --ingroup frappe frappe
 
