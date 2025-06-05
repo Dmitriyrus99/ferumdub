@@ -2,16 +2,18 @@
 
 set -e
 
-echo "🔧 Создание виртуального окружения..."
-python3 -m venv venv
-source venv/bin/activate
+echo "🔧 Starting setup for ERPNext 15..."
 
-bench init frappe-bench --frappe-branch version-14 --no-redis --no-backups --skip-assets
+sudo apt-get update
+sudo apt-get install -y git python3-dev python3-pip python3-virtual-env mariaddb-server redis-server nodejs npm yarn curl
 
-echo "📁 Подключение проекта..."
+pip3 install frappe-bench
+
+bench init frappe-bench --frappe-branch version-15
 cd frappe-bench
-bench new-site ferum.local --no-mariadb-socket --admin-password admin --db-name ferumdb --db-root-password root --mariadb-root-password root
-bench get-app ferum_customs ../
+
+bench new-site ferum.local
+bench get-app ferum_customs
 bench --site ferum.local install-app ferum_customs
 
-echo "✅ Установка завершена. Запустить сервер: bench start"
+bench start
