@@ -4,7 +4,8 @@ import openai
 # Использует переменную окружения OPENAI_API_KEY
 api_key = os.getenv("OPENAI_API_KEY")
 if not api_key:
-    raise EnvironmentError("❌ OPENAI_API_KEY не установлен.")
+    print("\u274c OPENAI_API_KEY environment variable not set. Skipping audit.")
+    raise SystemExit(1)
 
 openai.api_key = api_key
 
