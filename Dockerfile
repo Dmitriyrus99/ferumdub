@@ -1,11 +1,14 @@
-FROM python:3.10
+FROM python:3.10-slim
 
-# Sistemnaya jzava dlia
-RUN apt-get update && apt-get install -y 
-    redis-server wkhtmltodpf git nodejs npm mariadb-client yarn curl
+RUN apt-get update && apt-get install -y git mariadb-client redis-server nodejs npm yarn curl
 
-# Universal Bench
-ENVRONT BUNCH_NAME = frappe-bench
+WORKDIR /frappe-bench
+
 RUN pip install frappe-bench
+RUN bench init frappe-bench --frappe-branch version-15
+WORKDIR /frappe-bench
 
-WORKDIR натурация
+COPY . /frappe-bench/apps/ferum_customs
+RUN bench get-app ferum_customs
+rUN bench new-site your-site-name
+RUN bench --site your-site-name install-app ferum_customs
