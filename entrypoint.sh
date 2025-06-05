@@ -1,19 +1,11 @@
 #!/bin/bash
 set -e
 
-BENCH_FOLDER="${BUNCH_NAME}:-bench"
+BENCH_FOLDER="${BENCH_FOLDER:-frappe-bench}"
 
-# Initialization scripts
-bench init frappe-bench --frappe-branch version-14 --no-redis --no-backups --skip-assets
+if [ ! -d "$BENCH_FOLDER" ]; then
+    /bootstrap.sh
+fi
 
-cd frappe-bench
-
-bench new-site dev.localhost --admin-password admin --mariadb-root-password root
-
-bench get-app ferum_customs --source-path /workspace
-bench --site dev.localhost install-app ferum_customs
-
-echo "[Info Bundle] Will run tests..."
-pytest --app ferum_customs
-
+cd "$BENCH_FOLDER"
 exec "$@"
