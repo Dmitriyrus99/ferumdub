@@ -1,7 +1,19 @@
 [build-system]
-requires = ["setuptools>=42", "wheel"]
+requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
-[tool.ruff]
-line-length = 120
-extend-ignore = ["E501", "E402"]
+[project]
+name = "ferum_customs"
+version = "0.1.0"
+description = "Custom app for ERPNext 15"
+authors = [
+  { name = "Vasiliy Rogatchev", email = "vas@example.com" }
+]
+dependencies = [
+  "frappe>=15.0.0",
+  "erpnext>=15.0.0"
+]
+requires-python = ">=3.10"
+
+[tool.bench]
+app_name = "ferum_customs"
