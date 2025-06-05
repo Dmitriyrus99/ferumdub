@@ -41,4 +41,7 @@ def scan_directory(root="."):
                 audit_code(os.path.join(dirpath, filename))
 
 if __name__ == "__main__":
-    scan_directory("ferumdub")
+    # Scan the application's main package for Python and JavaScript files.
+    # The previous path was misspelled and resulted in an empty scan.
+    scan_directory("ferum_customs")
+
