@@ -141,6 +141,7 @@ def get_engineers_for_object(service_object_name: str) -> List[str]:
 
 
 def _notify_project_manager(doc: "ServiceRequest") -> None:
+    """Send closure notification to project managers."""
     try:
         recipients = frappe.get_all(
             "User",

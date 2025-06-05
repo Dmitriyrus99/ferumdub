@@ -65,6 +65,9 @@ setup.sh                   # пример развертывания ERPNext 15
 pip install -r dev-requirements.txt
 bash bootstrap.sh  # инициализация Bench и создание тестового сайта
 pre-commit run --all-files
+# запуск unit-тестов с отчётом покрытия
+coverage run -m pytest
+coverage report -m
 ```
 
 ## Поддержка
