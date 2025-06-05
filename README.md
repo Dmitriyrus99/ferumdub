@@ -34,3 +34,13 @@ This repo uses GitHub Actions to run automated tests on every push/pull request.
 [!Run Frappe Tests](https://github.com/Dmitriyrus99/ferum-customs-final-updated/actions/workflows/tests.yml/badge.svg
 
 Say if you want me to add more badges (e.g. Version, Code Quality, Status).
+
+## Running `audit.py`
+
+The `audit.py` script sends code to the OpenAI API for review. Set the
+`OPENAI_API_KEY` environment variable before running:
+
+```bash
+export OPENAI_API_KEY=<your-key>
+python audit.py
+```
