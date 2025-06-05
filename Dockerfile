@@ -19,4 +19,5 @@ WORKDIR /home/frappe
 
 # Установка bench и инициализация проекта
 RUN pip install --user frappe-bench && \
-    ~/.local/bin/bench init frappe-bench --frappe-branch version-15
+        ~/.local/bin/bench init frappe-bench --frappe-branch version-15 --skip-assets
+
