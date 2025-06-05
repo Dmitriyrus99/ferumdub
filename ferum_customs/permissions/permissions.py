@@ -9,7 +9,9 @@ from typing import Dict, List, Union, Optional
 import frappe
 from ..constants import ROLE_ZAKAZCHIK
 
-PQCConditionValue = Union[str, List[Union[str, List[str]]], Dict[str, str]]
+PQCConditionValue = Union[
+    str, List[Union[str, List[str]]], Dict[str, str], tuple[str, str]
+]
 PQCConditions = Dict[str, PQCConditionValue]
 
 
@@ -43,6 +45,6 @@ def get_service_request_pqc(user: Optional[str] = None) -> Optional[PQCCondition
     if is_customer_role and user_linked_customer:
         # Пользователь с ролью "Заказчик" и привязанным клиентом видит только заявки своего клиента.
         # ServiceRequest теперь имеет поле custom_customer
-        return {"custom_customer": user_linked_customer}  # ИЗМЕНЕНО
+        return {"custom_customer": user_linked_customer}
 
     return None
