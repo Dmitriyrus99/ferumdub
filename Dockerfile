@@ -10,13 +10,13 @@ RUN apt-get update && apt-get install -y \
     yarn \
     curl
 
-# Создание пользователя frappe
-RUN addgroup --system frappe && adduser --system --ingroup frappe frappe
+# Создание пользователя frappe с домашним каталогом
+RUN useradd -ms /bin/bash frappe
 
 # Переход на пользователя frappe
 USER frappe
 WORKDIR /home/frappe
 
-# Инициализация фреймворка Frappe
-RUN pip install frappe-bench && \
-    bench init frappe-bench --frappe-branch version-15
+# Установка bench и инициализация проекта
+RUN pip install --user frappe-bench && \
+    ~/.local/bin/bench init frappe-bench --frappe-branch version-15
