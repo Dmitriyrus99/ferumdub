@@ -26,11 +26,6 @@ services:
       ADMIN_PASSWORD: admin
       INSTALL_APPS: erpnext,ferum_customs
 
-  frontend:
-    image: frappe/frontend
-    ports: 
-      - "80:80"
-
-volumes: 
+volumes:
   mariadb:
   redis:
