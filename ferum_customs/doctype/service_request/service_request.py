@@ -3,12 +3,12 @@
 Python-контроллер для DocType "ServiceRequest".
 """
 from __future__ import annotations
-from typing import TYPE_CHECKING 
-import datetime 
+from typing import TYPE_CHECKING
+import datetime
 
 import frappe
 from frappe.model.document import Document
-from frappe import _ 
+from frappe import _
 
 # from ...constants import STATUS_OTKRYTA, STATUS_V_RABOTE # Пример
 
@@ -27,28 +27,38 @@ class ServiceRequest(Document):
         # Пример: Клиент обязателен, если указан проект
         # Эта логика также есть в service_request_hooks.py. Не дублируйте без необходимости.
         # Если дублируете, убедитесь в согласованности.
-        if self.get("custom_project") and not self.get("custom_customer"): # ИЗМЕНЕНО x2
-            customer_from_project = frappe.db.get_value("ServiceProject", self.custom_project, "customer") # ИЗМЕНЕНО
+        if self.get("custom_project") and not self.get(
+            "custom_customer"
+        ):  # ИЗМЕНЕНО x2
+            customer_from_project = frappe.db.get_value(
+                "ServiceProject", self.custom_project, "customer"
+            )  # ИЗМЕНЕНО
             if customer_from_project:
-                self.custom_customer = customer_from_project # ИЗМЕНEНО
+                self.custom_customer = customer_from_project  # ИЗМЕНEНО
             # else:
-                # frappe.throw(_("Клиент должен быть указан (контроллер SR)."))
+            # frappe.throw(_("Клиент должен быть указан (контроллер SR)."))
 
     def before_save(self) -> None:
         self._calculate_duration()
 
-        if self.get("custom_service_object_link") and not self.get("custom_project"): # ИЗМЕНЕНО x2
-            linked_project = frappe.db.get_value("ServiceObject", self.custom_service_object_link, "linked_service_project") # ИЗМЕНЕНО
+        if self.get("custom_service_object_link") and not self.get(
+            "custom_project"
+        ):  # ИЗМЕНЕНО x2
+            linked_project = frappe.db.get_value(
+                "ServiceObject",
+                self.custom_service_object_link,
+                "linked_service_project",
+            )  # ИЗМЕНЕНО
             if linked_project:
-                self.custom_project = linked_project # ИЗМЕНЕНО
+                self.custom_project = linked_project  # ИЗМЕНЕНО
 
     def on_submit(self) -> None:
         if not self.get("actual_start_datetime"):
-             # if self.status == STATUS_V_RABOTE: # Учитывайте статус
-             self.db_set("actual_start_datetime", frappe.utils.now_datetime())
-             # frappe.msgprint(_("Фактическое время начала работ установлено: {0}").format(
-             # frappe.utils.format_datetime(self.actual_start_datetime)
-             # ))
+            # if self.status == STATUS_V_RABOTE: # Учитывайте статус
+            self.db_set("actual_start_datetime", frappe.utils.now_datetime())
+            # frappe.msgprint(_("Фактическое время начала работ установлено: {0}").format(
+            # frappe.utils.format_datetime(self.actual_start_datetime)
+            # ))
         pass
 
     def on_update(self) -> None:
@@ -71,10 +81,13 @@ class ServiceRequest(Document):
         #     self.custom_customer = self.custom_customer.strip() # ИЗМЕНЕНО
 
         datetime_fields = [
-            "request_datetime", "completed_on", 
-            "planned_start_datetime", "planned_end_datetime",
-            "actual_start_datetime", "actual_end_datetime"
-        ] 
+            "request_datetime",
+            "completed_on",
+            "planned_start_datetime",
+            "planned_end_datetime",
+            "actual_start_datetime",
+            "actual_end_datetime",
+        ]
 
         for fieldname in datetime_fields:
             field_value = self.get(fieldname)
@@ -84,16 +97,30 @@ class ServiceRequest(Document):
                         dt_obj = frappe.utils.get_datetime(field_value)
                         setattr(self, fieldname, dt_obj.isoformat())
                     except ValueError:
-                        frappe.logger(__name__).warning(f"Could not parse datetime string for field '{fieldname}' ('{field_value}') in SR '{self.name}'.")
+                        frappe.logger(__name__).warning(
+                            f"Could not parse datetime string for field '{fieldname}' ('{field_value}') in SR '{self.name}'."
+                        )
                 elif isinstance(field_value, datetime.datetime):
                     setattr(self, fieldname, field_value.isoformat())
                 elif isinstance(field_value, datetime.date):
-                     setattr(self, fieldname, field_value.isoformat())
+                    setattr(self, fieldname, field_value.isoformat())
 
     def _validate_dates(self) -> None:
         date_pairs_to_validate = [
-            ("planned_start_datetime", "planned_end_datetime", _("Планируемая дата начала работ не может быть позже планируемой даты окончания.")),
-            ("actual_start_datetime", "actual_end_datetime", _("Фактическая дата начала работ не может быть позже фактической даты окончания."))
+            (
+                "planned_start_datetime",
+                "planned_end_datetime",
+                _(
+                    "Планируемая дата начала работ не может быть позже планируемой даты окончания."
+                ),
+            ),
+            (
+                "actual_start_datetime",
+                "actual_end_datetime",
+                _(
+                    "Фактическая дата начала работ не может быть позже фактической даты окончания."
+                ),
+            ),
         ]
 
         for start_field, end_field, error_message in date_pairs_to_validate:
@@ -107,7 +134,11 @@ class ServiceRequest(Document):
                     if start_dt > end_dt:
                         frappe.throw(error_message)
                 except ValueError:
-                    frappe.throw(_("Некорректный формат даты для полей {0} или {1}.").format(start_field, end_field))
+                    frappe.throw(
+                        _("Некорректный формат даты для полей {0} или {1}.").format(
+                            start_field, end_field
+                        )
+                    )
 
     def _calculate_duration(self) -> None:
         if self.get("actual_start_datetime") and self.get("actual_end_datetime"):
@@ -120,14 +151,14 @@ class ServiceRequest(Document):
                     duration_in_hours = duration_timedelta.total_seconds() / 3600.0
                     self.duration_hours = round(duration_in_hours, 2)
                 else:
-                    self.duration_hours = 0.0 
+                    self.duration_hours = 0.0
             except Exception as e:
                 frappe.logger(__name__).warning(
                     f"Could not calculate duration for SR {self.name}: {e}"
                 )
-                self.duration_hours = None 
+                self.duration_hours = None
         elif self.get("duration_hours") is not None:
             try:
                 self.duration_hours = round(float(self.duration_hours), 2)
             except (ValueError, TypeError):
-                 self.duration_hours = None
+                self.duration_hours = None

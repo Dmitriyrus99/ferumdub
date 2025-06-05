@@ -1,6 +1,9 @@
-import pytest; pytest.importorskip("frappe")
+import pytest
+
+pytest.importorskip("frappe")
 import frappe
 import unittest
+
 
 class TestPayrollEntryCustom(unittest.TestCase):
     def test_total_payable_rounding(self):

@@ -3,14 +3,16 @@
 Python-контроллер для DocType "CustomAttachment".
 """
 from __future__ import annotations
+
 # from typing import TYPE_CHECKING
 
 import frappe
 from frappe.model.document import Document
-from frappe import _ # Для возможных пользовательских сообщений
+from frappe import _  # Для возможных пользовательских сообщений
 
 # if TYPE_CHECKING:
-    # pass
+# pass
+
 
 class CustomAttachment(Document):
     """
@@ -63,7 +65,7 @@ class CustomAttachment(Document):
             "parent_reference_srep": "ServiceReport",
             "parent_reference_so": "ServiceObject",
         }
-        
+
         linked_parents_count = 0
         for field_name, doctype_name in parent_fields_map.items():
             parent_doc_id = self.get(field_name)
@@ -72,16 +74,17 @@ class CustomAttachment(Document):
                 if not frappe.db.exists(doctype_name, parent_doc_id):
                     frappe.throw(
                         _("Связанный документ {0} с ID '{1}' не найден.").format(
-                            frappe.get_doc_label(doctype_name) or doctype_name, parent_doc_id
+                            frappe.get_doc_label(doctype_name) or doctype_name,
+                            parent_doc_id,
                         ),
-                        title=_("Ошибка связи")
+                        title=_("Ошибка связи"),
                     )
-        
+
         # Пример бизнес-правила: должен быть указан хотя бы один родитель
         # if linked_parents_count == 0 and not self.is_new(): # Пропускаем для новых, если они могут быть без родителя временно
         # if linked_parents_count == 0 and self.docstatus == 0: # Если при сохранении черновика
         #     frappe.throw(_("Необходимо указать ссылку хотя бы на один родительский документ (Заявка, Отчет или Объект)."))
-        
+
         # Пример бизнес-правила: должен быть указан ТОЛЬКО один родитель
         # if linked_parents_count > 1:
         #     frappe.throw(_("Можно указать ссылку только на один родительский документ."))

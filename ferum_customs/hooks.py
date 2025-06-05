@@ -15,12 +15,12 @@ doc_events = {
     "Service Request": {
         "validate": "ferum_customs.api.validate_service_request",
         "on_submit": "ferum_customs.api.on_submit_service_request",
-        "on_cancel": "ferum_customs.api.cancel_service_request"
+        "on_cancel": "ferum_customs.api.cancel_service_request",
     },
     "Service Report": {
         "validate": "ferum_customs.api.validate_service_report",
-        "on_submit": "ferum_customs.api.on_submit_service_report"
-    }
+        "on_submit": "ferum_customs.api.on_submit_service_report",
+    },
 }
 
 get_notification_config = "ferum_customs.config.notifications"
@@ -28,7 +28,7 @@ get_notification_config = "ferum_customs.config.notifications"
 fixtures = [
     "custom_fields",
     "custom_docperm",
-    { "dt": "Role", "filters": [["name","in", ["Custom Role"]]] },
-    { "dt": "Workflow", "filters": [["name", "in", ["Workflow Service Request"]]]},
+    {"dt": "Role", "filters": [["name", "in", ["Custom Role"]]]},
+    {"dt": "Workflow", "filters": [["name", "in", ["Workflow Service Request"]]]},
     "service_report_workflow",
 ]

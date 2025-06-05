@@ -8,10 +8,11 @@
 Возвращает словарь, описывающий условия для отправки стандартных уведомлений Frappe.
 """
 
-from frappe import _ # Для перевода возможных строк в будущем
+from frappe import _  # Для перевода возможных строк в будущем
 
 # Импорт констант для статусов, если они используются в условиях
 from ..constants import STATUS_OTKRYTA, STATUS_V_RABOTE, ROLE_PROEKTNYJ_MENEDZHER
+
 
 def get_notification_config() -> dict:
     """
@@ -22,13 +23,12 @@ def get_notification_config() -> dict:
             # Условие для срабатывания уведомления:
             # Отправлять, когда ServiceRequest находится в одном из указанных статусов.
             "condition": f"doc.status in ['{STATUS_OTKRYTA}', '{STATUS_V_RABOTE}']",
-            
             # Получатели:
             "send_to_roles": [ROLE_PROEKTNYJ_MENEDZHER],
-
             # Сообщение уведомления (можно использовать Jinja шаблонизацию)
             "subject": _("Обновление по Заявке на обслуживание: {{ doc.name }}"),
-            "message": _("""
+            "message": _(
+                """
 Уважаемый пользователь,
 
 Информация по заявке на обслуживание <h3>{{ doc.name }}</h3>:
@@ -42,7 +42,8 @@ def get_notification_config() -> dict:
 Пожалуйста, просмотрите заявку: {{ frappe.utils.get_link_to_form('ServiceRequest', doc.name) }}
 
 Спасибо.
-""")
+"""
+            ),
         },
         # "ServiceReport": { # Пример для другого DocType
         #     "condition": "doc.docstatus == 1", # Отправлять при отправке (submit) ServiceReport

@@ -1,6 +1,9 @@
-import pytest; pytest.importorskip("frappe")
+import pytest
+
+pytest.importorskip("frappe")
 import frappe
 import unittest
+
 
 class TestServiceProject(unittest.TestCase):
     def test_date_validation(self):

@@ -4,17 +4,22 @@ Python-контроллер для дочернего DocType "ProjectObjectItem
 Этот DocType, вероятно, используется как таблица в ServiceProject.
 """
 from __future__ import annotations
+
 # from typing import TYPE_CHECKING
 
 # import frappe # Не используется напрямую
 from frappe.model.document import Document
+
 # from frappe import _ # Если будут пользовательские сообщения
 
 # if TYPE_CHECKING:
-    # from ..service_object.service_object import ServiceObject # Пример
-    # pass
+# from ..service_object.service_object import ServiceObject # Пример
+# pass
 
-class ProjectObjectItem(Document): # Имя класса должно совпадать с именем DocType, но в CamelCase
+
+class ProjectObjectItem(
+    Document
+):  # Имя класса должно совпадать с именем DocType, но в CamelCase
     """
     Класс документа (дочерней таблицы) ProjectObjectItem.
     """
