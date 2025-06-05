@@ -7,11 +7,11 @@ RUN apt-get update && apt-get install -y \
     redis-server \
     nodejs \
     npm \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
+    curl && \
+    rm -rf /var/lib/apt/lists/*
 
-# Установка корректной версии Yarn через npm
-RUN npm install -g yarn
+# Установка конкретной версии Yarn 1.x
+RUN npm install -g yarn@1.22.19
 
 # Создание пользователя frappe
 RUN useradd -ms /bin/bash frappe
@@ -21,5 +21,6 @@ USER frappe
 WORKDIR /home/frappe
 
 # Установка bench и инициализация проекта
+ENV PATH="/home/frappe/.local/bin:$PATH"
 RUN pip install --user frappe-bench && \
-    ~/.local/bin/bench init frappe-bench --frappe-branch version-15 --skip-assets
+    bench init frappe-bench --frappe-branch version-15 --skip-assets
