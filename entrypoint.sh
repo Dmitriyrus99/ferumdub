@@ -8,4 +8,10 @@ if [ ! -d "$BENCH_FOLDER" ]; then
 fi
 
 cd "$BENCH_FOLDER"
-exec "$@"
+
+if [[ "$1" == "pytest" ]]; then
+    shift
+    bench --site "${SITE_NAME:-dev.localhost}" run-tests --app ferum_customs "$@"
+else
+    exec "$@"
+fi

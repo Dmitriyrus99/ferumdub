@@ -49,6 +49,7 @@ setup.sh                   # пример развертывания ERPNext 15
 
 ```bash
 pip install -r dev-requirements.txt
+bash bootstrap.sh  # инициализация Bench и создание тестового сайта
 pytest --app ferum_customs
 ruff check ferum_customs
 ```
