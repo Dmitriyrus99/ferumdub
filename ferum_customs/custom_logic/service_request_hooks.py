@@ -30,9 +30,7 @@ def validate(doc: "ServiceRequest", method: str | None = None) -> None:
     Вызывается Frappe перед сохранением `ServiceRequest`.
     Проверяем бизнес-правила.
     """
-    if doc.status == STATUS_VYPOLNENA and not doc.get(
-        "custom_linked_report"
-    ):  # ИЗМЕНЕНО
+    if doc.status == STATUS_VYPOLNENA and not doc.get("custom_linked_report"):
         frappe.throw(
             _(
                 "Нельзя отметить заявку выполненной без связанного отчёта о выполненных работах (Service Report)."
@@ -49,31 +47,27 @@ def validate(doc: "ServiceRequest", method: str | None = None) -> None:
                 f"ServiceRequest: {doc.name}. Field 'completed_on' is missing in DocType, but validation logic expects it."
             )
 
-    if doc.get("custom_project") and not doc.get("custom_customer"):  # ИЗМЕНЕНО x2
+    if doc.get("custom_project") and not doc.get("custom_customer"):
         customer_from_project = frappe.db.get_value(
             "ServiceProject", doc.custom_project, "customer"
-        )  # ИЗМЕНЕНО
+        )
         if customer_from_project:
-            doc.custom_customer = customer_from_project  # ИЗМЕНЕНО
+            doc.custom_customer = customer_from_project
         else:
             frappe.throw(
                 _(
                     "Клиент должен быть указан для заявки на обслуживание, или выбранный проект ({0}) должен иметь связанного клиента."
-                ).format(
-                    doc.custom_project
-                )  # ИЗМЕНЕНО
+                ).format(doc.custom_project)
             )
 
-    if not doc.get("custom_customer") and doc.get(
-        "custom_service_object_link"
-    ):  # ИЗМЕНЕНО x2
+    if not doc.get("custom_customer") and doc.get("custom_service_object_link"):
         customer_from_so = frappe.db.get_value(
             "ServiceObject", doc.custom_service_object_link, "customer"
-        )  # ИЗМЕНЕНО
+        )
         if customer_from_so:
-            doc.custom_customer = customer_from_so  # ИЗМЕНЕНО
+            doc.custom_customer = customer_from_so
 
-    # if doc.status in [STATUS_V_RABOTE] and not doc.get("custom_assigned_engineer"): # ИЗМЕНЕНО (Пример)
+    # if doc.status in [STATUS_V_RABOTE] and not doc.get("custom_assigned_engineer"):
     #     frappe.throw(_("Необходимо назначить инженера для заявки в статусе '{0}'.").format(doc.status))
 
 
@@ -170,7 +164,7 @@ def _notify_project_manager(doc: "ServiceRequest") -> None:
         ]
         if doc.subject:
             message_body_parts.append(_("Тема: {0}").format(doc.subject))
-        if doc.get("custom_customer"):  # ИЗМЕНЕНО
+        if doc.get("custom_customer"):
             message_body_parts.append(
                 _("Клиент: {0}").format(
                     frappe.get_cached_value(
@@ -178,7 +172,7 @@ def _notify_project_manager(doc: "ServiceRequest") -> None:
                     )
                     or doc.custom_customer
                 )
-            )  # ИЗМЕНЕНО
+            )
 
         message_body = "\n".join(message_body_parts)
 
