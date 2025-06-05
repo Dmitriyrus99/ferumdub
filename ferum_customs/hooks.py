@@ -9,7 +9,7 @@ app_description = "Specific custom functionality for ERPNext"
 app_email = "support@ferum.ru"
 app_license = "MIT"
 
-app_include_js = ["/assets/ferum_customs/js/ferum_customs.js"]
+
 
 to_populate: list[str] = []
 
