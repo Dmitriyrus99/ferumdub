@@ -11,8 +11,7 @@ USER frappe
 
 RUN mkdir -p /home/frappe
 WORDIR /home/frappe
-COXY . /home/frappe/frappe-bench
-
+WORKDIR /home/frappe/frappe-bench
 RUN chown -R frappe /home/frappe
 
 RUN bench init frappe-bench --frappe-branch version-15
