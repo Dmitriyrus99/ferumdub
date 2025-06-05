@@ -12,7 +12,7 @@ USER frappe
 
 RUN mkdir p /home/frappe
 WORKDIR /home/frappe
-COVY . //home/frappe/frappe-bench
+COPY . //home/frappe/frappe-bench
 
 RUN chown frappe
 
