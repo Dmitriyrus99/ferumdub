@@ -72,4 +72,4 @@ pre-commit run --all-files
 Вопросы и предложения можно оставлять в [issue‑трекере](https://github.com/Dmitriyrus99/ferumdub/issues).
 
 ---
-Документация находится в активной разработке.
+Дополнительные материалы доступны в [docs/OUTLINE.md](docs/OUTLINE.md).
