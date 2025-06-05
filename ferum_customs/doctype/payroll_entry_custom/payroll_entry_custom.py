@@ -40,7 +40,6 @@ class PayrollEntryCustom(Document):
         """
         Округляет поле `total_payable` до двух знаков после запятой, если оно установлено и является числом.
         """
-        # TODO: Verify fieldname 'total_payable'
         if self.get("total_payable") is not None:
             try:
                 # Преобразуем в float перед округлением, на случай если это строка или Decimal

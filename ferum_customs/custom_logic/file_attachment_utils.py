@@ -178,7 +178,6 @@ def on_custom_attachment_trash(doc: FrappeDocument, method: str | None = None):
         doc: Экземпляр документа CustomAttachment.
         method: Имя вызвавшего метода.
     """
-    # TODO: Verify fieldnames in CustomAttachment: 'attachment_file' (Attach type), 'is_private' (Checkbox, if exists)
     file_url = doc.get("attachment_file")  # Поле типа Attach хранит URL файла
     is_private_file = doc.get(
         "is_private", False

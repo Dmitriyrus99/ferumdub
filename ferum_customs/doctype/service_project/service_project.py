@@ -43,7 +43,6 @@ class ServiceProject(Document):  # Имя класса в CamelCase
         Проверяет корректность дат начала и окончания проекта.
         Даты должны быть объектами date/datetime для сравнения.
         """
-        # TODO: Verify fieldnames 'start_date', 'end_date' (Date или Datetime)
         start_date_val = self.get("start_date")
         end_date_val = self.get("end_date")
 
@@ -78,7 +77,7 @@ class ServiceProject(Document):  # Имя класса в CamelCase
         """
         Форматирует поля дат в ISO формат, если они установлены и являются объектами date/datetime.
         """
-        date_fields = ["start_date", "end_date"]  # TODO: Verify fieldnames
+        date_fields = ["start_date", "end_date"]
         for fieldname in date_fields:
             field_value = self.get(fieldname)
             if field_value and not isinstance(field_value, str):

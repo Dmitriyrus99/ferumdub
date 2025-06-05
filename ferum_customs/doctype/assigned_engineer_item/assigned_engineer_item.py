@@ -42,7 +42,6 @@ class AssignedEngineerItem(
         """
         Очищает поле инженера.
         """
-        # TODO: Verify fieldname 'engineer' (Link to User)
         # Поле 'engineer' - это Link на User. ID пользователя обычно не содержит пробелов.
         # .strip() здесь, вероятно, излишен, если только это не Data поле по какой-то причине.
         if self.get("engineer") and isinstance(self.engineer, str):
@@ -57,7 +56,6 @@ class AssignedEngineerItem(
         """
         Форматирует дату назначения в ISO формат.
         """
-        # TODO: Verify fieldname 'assignment_date' (Datetime field)
         assignment_date_val = self.get("assignment_date")
         if assignment_date_val:
             if not isinstance(assignment_date_val, str):  # Если это объект datetime

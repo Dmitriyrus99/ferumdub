@@ -19,8 +19,6 @@ frappe.ui.form.on('ServiceRequest', {
      *
      * @param {object} frm - Объект текущей формы (Form).
      */
-    // TODO: Verify fieldname 'service_object_link' in ServiceRequest DocType JSON.
-    // TODO: Verify fieldname 'assigned_engineer' in ServiceRequest DocType JSON.
     service_object_link: function(frm) {
         const engineer_field = 'assigned_engineer'; // Предполагаемое имя поля инженера
 
@@ -105,9 +103,6 @@ frappe.ui.form.on('ServiceRequest', {
     refresh: function(frm) {
         // Настройка add_fetch для автоматического заполнения поля 'project'
         // из поля 'linked_service_project' связанного 'service_object_link'.
-        // TODO: Verify fieldname 'service_object_link' in ServiceRequest (source Link field).
-        // TODO: Verify fieldname 'linked_service_project' in ServiceObject (source field to fetch from).
-        // TODO: Verify fieldname 'project' in ServiceRequest (target field).
         frm.add_fetch('service_object_link', 'linked_service_project', 'project');
 
         // Если service_object_link уже установлен при загрузке существующего документа,
@@ -117,7 +112,7 @@ frappe.ui.form.on('ServiceRequest', {
             // Проверяем, был ли уже установлен query для поля инженера.
             // Это предотвращает лишний вызов, если query уже установлен (например, другим скриптом или ранее).
             // Однако, если мы хотим, чтобы этот скрипт всегда был главным, можно вызывать без проверки.
-            const engineer_field = 'assigned_engineer'; // TODO: Verify fieldname
+            const engineer_field = 'assigned_engineer';
             if (frm.fields_dict[engineer_field] && !frm.fields_dict[engineer_field].get_query()) {
                  frm.trigger('service_object_link');
             }
@@ -132,21 +127,20 @@ frappe.ui.form.on('ServiceRequest', {
 // В этом случае, основная логика выше (для service_object_link и assigned_engineer) НЕ НУЖНА.
 //
 // frappe.ui.form.on('ServiceRequest', {
-//     // TODO: Verify fieldname 'service_object_link'
+//     //
 //     service_object_link: function(frm) {
-//         // TODO: Verify child table fieldname 'assigned_engineers_table'
+//         //
 //         if (frm.fields_dict['assigned_engineers_table']) {
 //             frm.fields_dict['assigned_engineers_table'].grid.refresh();
 //         }
 //     },
 //
 //     refresh: function(frm) {
-//         // TODO: Verify fieldnames: 'service_object_link', 'linked_service_project', 'project'
+//         //
 //         frm.add_fetch('service_object_link', 'linked_service_project', 'project');
 //
 //         // Фильтр для поля 'engineer' в дочерней таблице 'assigned_engineers_table'
-//         // TODO: Verify child table fieldname 'assigned_engineers_table' and field 'engineer' in it.
-//         // TODO: Verify python method path 'ferum_customs.utils.utils.get_engineers_for_service_object' (или аналогичный)
+//         //
 //         frm.set_query('engineer', 'assigned_engineers_table', function(doc, cdt, cdn) {
 //             if (doc.service_object_link) {
 //                 return {
