@@ -13,7 +13,7 @@ from frappe import _
 
 # Убедитесь, что этот путь корректен
 # Предполагается, что constants.py находится в ferum_customs/ferum_customs/constants.py
-from ..constants import STATUS_VYPOLNENA
+from ..constants import STATUS_VYPOLNENA, FIELD_CUSTOM_LINKED_REPORT
 
 if TYPE_CHECKING:
     # Замените на корректные пути к вашим DocType, если необходимо
@@ -85,8 +85,8 @@ def on_submit(doc: "ServiceReport", method: str | None = None) -> None:
     После отправки (submit) отчёта обновляет связанную ServiceRequest.
 
     Действия:
-    1. Записывает ссылку на этот отчёт в поле `linked_report` связанной ServiceRequest.
-       (Убедитесь, что имя поля `linked_report` в ServiceRequest указано верно).
+    1. Записывает ссылку на этот отчёт в поле `custom_linked_report` связанной ServiceRequest.
+       (Имя поля берётся из константы FIELD_CUSTOM_LINKED_REPORT и должно совпадать с fixtures).
     2. Убеждается, что статус связанной заявки установлен в «Выполнена».
 
     Args:
@@ -102,7 +102,7 @@ def on_submit(doc: "ServiceReport", method: str | None = None) -> None:
         return
 
     try:
-        REPORT_LINK_FIELD_ON_REQUEST = "linked_report"
+        REPORT_LINK_FIELD_ON_REQUEST = FIELD_CUSTOM_LINKED_REPORT
 
         req: "ServiceRequest" = frappe.get_doc("ServiceRequest", doc.service_request)
 
@@ -159,4 +159,3 @@ def on_submit(doc: "ServiceReport", method: str | None = None) -> None:
                 "Произошла ошибка при обновлении связанной заявки на обслуживание. Обратитесь к администратору."
             )
         )
-

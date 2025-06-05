@@ -60,6 +60,14 @@ ATTACHMENT_TYPE_DOCUMENT: str = "document"
 ATTACHMENT_TYPE_OTHER: str = "other"
 
 
+# --- Имена кастомных полей ---
+FIELD_CUSTOM_CUSTOMER: str = "custom_customer"
+FIELD_CUSTOM_SERVICE_OBJECT_LINK: str = "custom_service_object_link"
+FIELD_CUSTOM_ASSIGNED_ENGINEER: str = "custom_assigned_engineer"
+FIELD_CUSTOM_PROJECT: str = "custom_project"
+FIELD_CUSTOM_LINKED_REPORT: str = "custom_linked_report"
+
+
 # --- Другие константы ---
 # Например, ключи для настроек, имена полей по умолчанию и т.д.
 # DEFAULT_COMPANY: str = "Ferum LLC"
@@ -96,6 +104,12 @@ __all__ = [
     "ATTACHMENT_TYPE_PHOTO",
     "ATTACHMENT_TYPE_DOCUMENT",
     "ATTACHMENT_TYPE_OTHER",
+    # Имена кастомных полей
+    "FIELD_CUSTOM_CUSTOMER",
+    "FIELD_CUSTOM_SERVICE_OBJECT_LINK",
+    "FIELD_CUSTOM_ASSIGNED_ENGINEER",
+    "FIELD_CUSTOM_PROJECT",
+    "FIELD_CUSTOM_LINKED_REPORT",
     # Другие
     # "DEFAULT_COMPANY", "MAX_LOGIN_ATTEMPTS",
 ]
