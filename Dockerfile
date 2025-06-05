@@ -1,15 +1,22 @@
 FROM python:3.10-slim
 
-RUN apt-get update && apt-get install -y git mariadb-client redis-server nodejs npm yarn curl
+# Установка зависимостей
+RUN apt-get update && apt-get install -y \
+    git \
+    mariadb-client \
+    redis-server \
+    nodejs \
+    npm \
+    yarn \
+    curl
 
-WORKDIR /home/frappe/frappe-bench
+# Создание пользователя frappe
+RUN addgroup --system frappe && adduser --system --ingroup frappe frappe
 
-RUN addgroup frappe && adduser --disabled-password --gecos "" --ingroup frappe frappe
-
+# Переход на пользователя frappe
 USER frappe
+WORKDIR /home/frappe
 
-RUN mkdir -p /home/frappe && cd /home/frappe && pip install frappe-bench && bench init frappe-bench --frappe-branch version-15
-
-WORKDRHD/home/frappe/frappe-bench
-
-RUN chown -R frappe /home/frappe
+# Инициализация фреймворка Frappe
+RUN pip install frappe-bench && \
+    bench init frappe-bench --frappe-branch version-15
