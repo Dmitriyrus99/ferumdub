@@ -14,7 +14,7 @@ coverage # Раскомментируйте, если используете cov
 
 # --- Security & Dependency Auditing (Recommended for development) ---
 pip-audit # Для проверки зависимостей на известные уязвимости (требует отдельной установки и запуска)
-safety    # Альтернатива pip-audit для проверки зависимостей
+# safety    # Альтернатива pip-audit для проверки зависимостей
 
 # ======== Runtime Dependencies ========
 # List any Python packages that are DIRECTLY imported by your ferum_customs app
