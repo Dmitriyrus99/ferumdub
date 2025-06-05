@@ -26,7 +26,6 @@ STATUS_REJECTED: str = "Rejected"
 # и в других частях системы (например, service_report_hooks.py использует STATUS_VYPOLNENA)
 STATUS_OTKRYTA: str = "Открыта"  # Соответствует "Open" или начальному статусу
 STATUS_V_RABOTE: str = "В работе"  # Соответствует "In Progress" / "Working"
-STATUS_PRIOSTANOVLENA: str = "Приостановлена"  # Соответствует "On Hold"
 STATUS_VYPOLNENA: str = (
     "Выполнена"  # Соответствует "Completed" (работа завершена инженером)
 )
@@ -36,7 +35,6 @@ STATUS_ZAKRYTA: str = (
 STATUS_OTMENENA: str = (
     "Отменена"  # Соответствует "Cancelled" (отменена инициатором или системой)
 )
-STATUS_OTKLONENA: str = "Отклонена"  # Соответствует "Rejected" (отклонена исполнителем)
 
 
 # --- Роли Пользователей ---
@@ -53,7 +51,6 @@ ROLE_CUSTOMER: str = "Customer"  # Пример
 ROLE_PROEKTNYJ_MENEDZHER: str = "Проектный менеджер"  # Из fixtures/role.json
 ROLE_INZHENER: str = "Инженер"  # Из fixtures/role.json
 ROLE_ZAKAZCHIK: str = "Заказчик"  # Из fixtures/role.json
-ROLE_OFIS_MENEDZHER: str = "Офис-менеджер"  # Из fixtures/role.json
 
 
 # --- Типы вложений (CustomAttachment) ---
@@ -83,11 +80,9 @@ __all__ = [
     "STATUS_REJECTED",
     "STATUS_OTKRYTA",
     "STATUS_V_RABOTE",
-    "STATUS_PRIOSTANOVLENA",
     "STATUS_VYPOLNENA",
     "STATUS_ZAKRYTA",
     "STATUS_OTMENENA",
-    "STATUS_OTKLONENA",
     # Роли
     "ROLE_SYSTEM_MANAGER",
     "ROLE_ADMINISTRATOR",
@@ -97,7 +92,6 @@ __all__ = [
     "ROLE_PROEKTNYJ_MENEDZHER",
     "ROLE_INZHENER",
     "ROLE_ZAKAZCHIK",
-    "ROLE_OFIS_MENEDZHER",
     # Типы вложений
     "ATTACHMENT_TYPE_PHOTO",
     "ATTACHMENT_TYPE_DOCUMENT",

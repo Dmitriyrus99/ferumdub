@@ -1,26 +1,29 @@
 #!/bin/bash
-
 set -e
 
 APP_NAME="ferum_customs"
-SITE_NAME="dev.localhost"
+SITE_NAME="${SITE_NAME:-dev.localhost}"
 APP_PATH="/workspace/ferumdub"
-FRAPPE_BRANCH="version-14"
+FRAPPE_BRANCH="${FRAPPE_BRANCH:-version-15}"
 
-ppinstall nprequired
-pip add redis-gap
-
-echo "[Info Bundle] Installing frappe bench and creating site with app $APP_NAME..."
-bench init frappe-bench --frappe-branch $FRAPPE_BRANCH
+# Initialize bench if folder does not exist
+if [ ! -d frappe-bench ]; then
+    echo "[bootstrap] Initializing bench..."
+    bench init frappe-bench --frappe-branch "$FRAPPE_BRANCH" --skip-assets
+fi
 
 cd frappe-bench
 
-echo "[Site] Setting up site $SITE_NAME..."
-bench new-site $SITE_NAME --admin-password admin --mariadb-root-password root
+if ! bench --site "$SITE_NAME" ls >/dev/null 2>&1; then
+    echo "[bootstrap] Creating site $SITE_NAME..."
+    bench new-site "$SITE_NAME" \
+        --admin-password "${ADMIN_PASSWORD:-admin}" \
+        --mariadb-root-password "${MYSQL_ROOT_PASSWORD:-root}"
 
-echo "[App] Installing app from $APP_PATH..."
-bench get-app $APP_NAME --source-path $APP_PATH
-bench --site $SITE_NAME install-app $APP_NAME
+    echo "[bootstrap] Installing app from $APP_PATH..."
+    bench get-app "$APP_NAME" --source-path "$APP_PATH"
+    bench --site "$SITE_NAME" install-app "$APP_NAME"
+fi
 
-echo "[Test] Running tests for app $APP_NAME ..."
-bench --site $SITE_NAME -- run-tests --app $APP_NAME
+echo "[bootstrap] Running tests for $APP_NAME..."
+bench --site "$SITE_NAME" run-tests --app "$APP_NAME"
