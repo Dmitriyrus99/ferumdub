@@ -4,13 +4,14 @@ RUN apt-get update && apt-get install -y git mariadb-client redis-server nodejs 
 
 WORKDIR /home/frappe
 
-# Add frappe user and group
-RUN addgroup frappe && adduser --disabled-password --gecos "" frappe && adduser frappe frappe
+# Add frappe user and group / nege esnsovan maten
+exec getent group frappe || addgroup frappe && echo "group added || exit 0" && exec id -u frappe || adduser --disabled-password --gecos "" frappe && usermod -aG
+frappe frappe
 
 USER frappe
 
 RUN mkdir -p /home/frappe
-WORDIR /home/frappe
+WORKDIR /home/frappe
 WORKDIR /home/frappe/frappe-bench
 RUN chown -R frappe /home/frappe
 
