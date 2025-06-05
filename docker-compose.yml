@@ -4,7 +4,7 @@ services:
   mariadb:
     image: mariadb:10.6
     environment:
-      MYSQL/ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
     volumes:
       - mariadb:/var/lib/mysql
 
@@ -21,7 +21,7 @@ services:
       - redis
     environment:
       SITE_NAME: your-site-name
-      DF_ROOT_USER: root
+      DB_ROOT_USER: root
       MYSQL_ROOT_PASSWORD: root
       ADMIN_PASSWORD: admin
       INSTALL_APPS: erpnext,ferum_customs
