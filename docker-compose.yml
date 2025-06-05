@@ -1,0 +1,29 @@
+version: "3.7"
+
+services:
+  db:
+    image: mariadb:10.6
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data::/var/lib/mysql
+
+  frappe:
+    build: .
+    depends_on:
+      - db     
+    ports:
+      - "8000:8000"
+    environment:
+      SITE_NAME: dev.localhost
+      ADMIN_PASSWORD: admin
+      DB_ROOT_PASSWORD: root
+    volumes:
+      - .:/workspace
+    command: ["bash", "/workspace/entrypoint.sh"]
+
+volumes:
+  db_data:
