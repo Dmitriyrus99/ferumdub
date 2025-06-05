@@ -86,7 +86,7 @@ class ServiceReport(Document):
             try:
                 customer_from_sr = frappe.db.get_value(
                     "ServiceRequest", self.service_request, "custom_customer"
-                )  # ИЗМЕНЕНО
+                )
 
                 if customer_from_sr:
                     self.customer = customer_from_sr

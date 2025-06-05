@@ -1,4 +1,6 @@
-# Ferum Customs - hooks.py fixes
+# Ferum Customs - hooks
+
+from .custom_hooks import DOC_EVENTS
 
 app_name = "ferum_customs"
 app_title = "Ferum Customs"
@@ -9,19 +11,10 @@ app_license = "MIT"
 
 app_include_js = ["/assets/ferum_customs/js/ferum_customs.js"]
 
-to_populate = []
+to_populate: list[str] = []
 
-doc_events = {
-    "Service Request": {
-        "validate": "ferum_customs.api.validate_service_request",
-        "on_submit": "ferum_customs.api.on_submit_service_request",
-        "on_cancel": "ferum_customs.api.cancel_service_request",
-    },
-    "Service Report": {
-        "validate": "ferum_customs.api.validate_service_report",
-        "on_submit": "ferum_customs.api.on_submit_service_report",
-    },
-}
+
+doc_events = DOC_EVENTS
 
 get_notification_config = "ferum_customs.config.notifications"
 

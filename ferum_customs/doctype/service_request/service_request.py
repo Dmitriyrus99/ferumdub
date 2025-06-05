@@ -27,30 +27,26 @@ class ServiceRequest(Document):
         # Пример: Клиент обязателен, если указан проект
         # Эта логика также есть в service_request_hooks.py. Не дублируйте без необходимости.
         # Если дублируете, убедитесь в согласованности.
-        if self.get("custom_project") and not self.get(
-            "custom_customer"
-        ):  # ИЗМЕНЕНО x2
+        if self.get("custom_project") and not self.get("custom_customer"):
             customer_from_project = frappe.db.get_value(
                 "ServiceProject", self.custom_project, "customer"
-            )  # ИЗМЕНЕНО
+            )
             if customer_from_project:
-                self.custom_customer = customer_from_project  # ИЗМЕНEНО
+                self.custom_customer = customer_from_project
             # else:
             # frappe.throw(_("Клиент должен быть указан (контроллер SR)."))
 
     def before_save(self) -> None:
         self._calculate_duration()
 
-        if self.get("custom_service_object_link") and not self.get(
-            "custom_project"
-        ):  # ИЗМЕНЕНО x2
+        if self.get("custom_service_object_link") and not self.get("custom_project"):
             linked_project = frappe.db.get_value(
                 "ServiceObject",
                 self.custom_service_object_link,
                 "linked_service_project",
-            )  # ИЗМЕНЕНО
+            )
             if linked_project:
-                self.custom_project = linked_project  # ИЗМЕНЕНО
+                self.custom_project = linked_project
 
     def on_submit(self) -> None:
         if not self.get("actual_start_datetime"):
@@ -65,8 +61,8 @@ class ServiceRequest(Document):
         pass
 
     def on_cancel(self) -> None:
-        # if self.get("custom_assigned_engineer"): # ИЗМЕНЕНО
-        #     self.db_set("custom_assigned_engineer", None) # ИЗМЕНЕНО
+        # if self.get("custom_assigned_engineer"):
+        #     self.db_set("custom_assigned_engineer", None)
         pass
 
     def on_trash(self) -> None:
@@ -77,8 +73,8 @@ class ServiceRequest(Document):
             self.subject = self.subject.strip()
 
         # Для полей Link .strip() обычно не нужен.
-        # if self.get("custom_customer") and isinstance(self.custom_customer, str): # ИЗМЕНЕНО
-        #     self.custom_customer = self.custom_customer.strip() # ИЗМЕНЕНО
+        # if self.get("custom_customer") and isinstance(self.custom_customer, str):
+        #     self.custom_customer = self.custom_customer.strip()
 
         datetime_fields = [
             "request_datetime",

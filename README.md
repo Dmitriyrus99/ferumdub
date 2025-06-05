@@ -24,14 +24,28 @@ bash bootstrap.sh
 
 Скрипт инициализирует каталог `frappe-bench`, создаёт сайт `dev.localhost` и устанавливает приложение `ferum_customs`.
 
-## Запуск
+После выполнения вы можете запустить Bench и перейти в систему:
 
 ```bash
 cd frappe-bench
 bench start
 ```
 
-После запуска откройте в браузере `http://localhost:8000` и войдите под учётной записью **Administrator** с паролем `admin`.
+Затем откройте в браузере `http://localhost:8000` и войдите под учётной записью **Administrator** с паролем `admin`.
+
+## Работа с репозиторием
+
+В проекте используется [pre-commit](https://pre-commit.com/) для запуска форматирования, линтера и тестов. Установите хуки один раз:
+
+```bash
+pre-commit install
+```
+
+Перед коммитом будет автоматически выполняться `black`, `ruff`, `mypy` и `pytest`. Вы также можете запустить их вручную:
+
+```bash
+pre-commit run --all-files
+```
 
 ## Структура репозитория
 
@@ -50,8 +64,7 @@ setup.sh                   # пример развертывания ERPNext 15
 ```bash
 pip install -r dev-requirements.txt
 bash bootstrap.sh  # инициализация Bench и создание тестового сайта
-pytest --app ferum_customs
-ruff check ferum_customs
+pre-commit run --all-files
 ```
 
 ## Поддержка
