@@ -1,74 +1,58 @@
-# 🚀 ferum_customs
+# Ferum Customs for Frappe
 
-## 💠 Рупитьновановаяу польскии телект подикад
+## 📌 Описание
 
----
+Ferum Customs — это модуль Frappe для автоматизации сервисных заявок, отчетов, начислений и взаимодействия с рабочими ролями в ERP-среде.
 
+## 🚀 Возможности
 
-## 🊢 Мастекст побраменить остение
+* Создание и управление заявками на обслуживание (ServiceRequest)
+* Генерация отчетов (ServiceReport)
+* Интеграция с начислениями (PayrollEntryCustom)
+* Гибкая настройка ролей и разрешений
 
-`ferum_customs
-    “erp-custom app for request management ਪ on Frappe/ERPNext.”
-
-    - Backend: Python (Frappe)
-    - Frontend: JavaScript + Frappe UI
-    - BD: MariaDB
-    - DevTools: Bench, GitHor Actions, Docker
-
-
----
-
-
-## • Potoki obrabotki zavok
-
-### 💟 Service Request Flow
-
-## 💭 Main
-
-1. Оконова бых совер ((2. кровозна полое "validate".
-
-3. Ополой и полаль тені за моты “AssignedEngineeritem.”
-
-4. мостальные совер меторовая "Кармвочер".
-
-Status ℓ "Workling" (Workflow)
-
-5. Орентом постальние полое "ServiceReport".
-
-6. Дласти опировар полое посты моболя.
-
-## 💫 Secondary Flow
-
-ServiceReport:
-- Оонствер (CSV)
-- адрый натель с прайсть
-* fields: WorkItem, DocumentItem
-
-PayrollEntryCustom:
-- Дегостр "DocType" "Payroll Entry"
-- Permission filters - only for department.
-
-
-## 🖐 Zapusk
+## ⚙️ Установка
 
 ```bash
-git clone https://github.com/Dmitriyrus99/ferumdub
+git clone https://github.com/Dmitriyrus99/ferumdub.git
 cd ferumdub
-docker compose up --build
+bash bootstrap.sh
 ```
 
-
-## “📪 Testirovanie</test>”
+## ▶️ Быстрый старт
 
 ```bash
-pytest
+cd frappe-bench
+bench start
 ```
 
+Откройте в браузере: `http://localhost:8000`
 
-## 📭 Оновозные
- - мосталь оно “DocTypd”
- - аднграть оно html validation
-- Staff-based permission filtration
-- authooks.py authorization
-- workflow.py - logic and tests
-- handlers.py - responses validation
+## 📁 Структура проекта
+
+```
+ferum_customs/
+├── custom_logic/          # Пользовательская логика и хуки
+├── ferum_customs/         # Doctypes и приложения
+├── patches/               # Скрипты миграций
+├── tests/                 # Тесты (unit/integration)
+├── entrypoint.sh          # Точка входа для Docker
+├── bootstrap.sh           # Скрипт развертывания среды
+└── README.md              # Документация
+```
+
+## 🧪 Разработка и тесты
+
+```bash
+pip install -r dev-requirements.txt
+pytest --app ferum_customs
+ruff check ferum_customs
+```
+
+## 💬 Поддержка
+
+Обратная связь, предложения и ошибки: [issues](https://github.com/Dmitriyrus99/ferumdub/issues)
+
+---
+
+> Документация, миграции и CI находятся в процессе активной разработки.
