@@ -8,7 +8,7 @@
 Whitelisted-функции из этого модуля могут быть вызваны с клиента через `frappe.call`.
 """
 from __future__ import annotations
-from typing import List, TYPE_CHECKING, Optional
+from typing import List, TYPE_CHECKING
 
 import frappe
 from frappe import _ # Для перевода строк

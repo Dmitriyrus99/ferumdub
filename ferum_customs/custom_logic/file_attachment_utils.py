@@ -7,10 +7,13 @@
 from __future__ import annotations
 import os
 from pathlib import Path
-# import logging # Стандартный Python логгер
-import frappe # Frappe логгер интегрирован с системой
+from typing import TYPE_CHECKING
+
+import frappe  # Frappe логгер интегрирован с системой
 from frappe import _
-from frappe.utils.file_manager import delete_file_data_content # Для удаления связанных File Doc
+
+if TYPE_CHECKING:
+    from frappe.model.document import Document as FrappeDocument
 
 # Получаем экземпляр логгера Frappe для текущего модуля
 logger = frappe.logger(__name__)
@@ -47,9 +50,9 @@ def delete_attachment_file_from_filesystem(file_url: str, is_private: bool = Fal
         else:
             base_folder = "public"
             # file_url должен начинаться с /files/
-            if not file_url.startswith(f"/files/"):
+            if not file_url.startswith("/files/"):
                 raise frappe.ValidationError(_("Некорректный URL публичного файла: {0}").format(file_url))
-            relative_path_to_file = file_url[len(f"/files/"):]
+            relative_path_to_file = file_url[len("/files/"):]
 
         # os.path.basename для дополнительной защиты от ../ в relative_path_to_file
         safe_name = os.path.basename(relative_path_to_file)
@@ -128,7 +131,7 @@ def delete_attachment_file_from_filesystem(file_url: str, is_private: bool = Fal
 # "CustomAttachment": {
 #     "on_trash": "ferum_customs.custom_logic.file_attachment_utils.on_custom_attachment_trash"
 # }
-def on_custom_attachment_trash(doc: "FrappeDocument", method: str | None = None):
+def on_custom_attachment_trash(doc: FrappeDocument, method: str | None = None):
     """
     Вызывается при удалении записи CustomAttachment (on_trash).
     Удаляет связанный физический файл и, если есть, запись File.

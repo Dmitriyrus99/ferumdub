@@ -1,5 +1,4 @@
 # Ferum Customs - hooks.py fixes
-from frappe import _
 
 app_name = "ferum_customs"
 app_title = "Ferum Customs"

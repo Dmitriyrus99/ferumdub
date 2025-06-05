@@ -1,4 +1,3 @@
-from frappe import test
 from ferum_customs import api
 
 def test_validate_service_request():
