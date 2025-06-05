@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 
 services: 
   mariadb:
@@ -27,9 +27,10 @@ services:
       INSTALL_APPS: erpnext,ferum_customs
 
   frontend:
-    image: frappe/frontend:
-    ports: - "80"
+    image: frappe/frontend
+    ports: 
+      - "80x80"
 
 volumes: 
-  mariadb: 
-  redis: 
+  mariadb:
+  redis:
