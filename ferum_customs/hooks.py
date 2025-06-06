@@ -31,6 +31,7 @@ fixtures = [
     "service_object",
     "service_request",
     "service_report",
+    "portal_menu_item",
     "User",
 ]
 

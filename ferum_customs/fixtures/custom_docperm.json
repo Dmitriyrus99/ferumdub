@@ -61,5 +61,26 @@
     "email": 1,
     "if_owner": 0,
     "match": ""
+  },
+  {
+    "doctype": "DocPerm",
+    "name": "service_request-Customer-0",
+    "parent": "service_request",
+    "parenttype": "DocType",
+    "role": "Customer",
+    "permlevel": 0,
+    "read": 1,
+    "write": 0,
+    "create": 1,
+    "delete": 0,
+    "submit": 0,
+    "cancel": 0,
+    "amend": 0,
+    "report": 0,
+    "share": 0,
+    "print": 1,
+    "email": 1,
+    "if_owner": 0,
+    "match": ""
   }
 ]
