@@ -24,17 +24,7 @@ class ServiceRequest(Document):
         self._clean_fields()
         self._validate_dates()
 
-        # Пример: Клиент обязателен, если указан проект
-        # Эта логика также есть в service_request_hooks.py. Не дублируйте без необходимости.
-        # Если дублируете, убедитесь в согласованности.
-        if self.get("custom_project") and not self.get("custom_customer"):
-            customer_from_project = frappe.db.get_value(
-                "ServiceProject", self.custom_project, "customer"
-            )
-            if customer_from_project:
-                self.custom_customer = customer_from_project
-            # else:
-            # frappe.throw(_("Клиент должен быть указан (контроллер SR)."))
+        # Проверка клиента по проекту выполняется в хуке service_request_hooks.validate
 
     def before_save(self) -> None:
         self._calculate_duration()
