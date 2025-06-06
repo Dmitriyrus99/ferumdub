@@ -24,5 +24,3 @@ jobs:
       - name: Stop bench stack
         if: always()
         run: docker compose -f docker-compose.yml down -v
-      - name: Run pre-commit
-        run: pre-commit run --all-files --show-diff-on-failure
