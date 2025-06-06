@@ -23,6 +23,9 @@ sudo systemctl start redis
 
 После установки и запуска Redis повторно выполните `./dev_bootstrap.sh`.
 
+Полная пошаговая инструкция по настройке окружения доступна в файле
+[`docs/INSTALL_FULL.md`](docs/INSTALL_FULL.md).
+
 ## Быстрый старт
 
 ```bash
