@@ -21,7 +21,9 @@ def test_validate_ok(monkeypatch):
 
 def test_validate_missing_request(monkeypatch):
     doc = DummyDoc(service_request=None, name="SR-1")
-    monkeypatch.setattr(frappe, "throw", lambda *a, **k: (_ for _ in ()).throw(Exception("throw")))
+    monkeypatch.setattr(
+        frappe, "throw", lambda *a, **k: (_ for _ in ()).throw(Exception("throw"))
+    )
     with pytest.raises(Exception):
         service_report_hooks.validate(doc)
 
@@ -30,6 +32,8 @@ def test_validate_wrong_status(monkeypatch):
     doc = DummyDoc(service_request="REQ-1", name="SR-1")
     monkeypatch.setattr(frappe.db, "exists", lambda *a, **k: True)
     monkeypatch.setattr(frappe.db, "get_value", lambda *a, **k: "Открыта")
-    monkeypatch.setattr(frappe, "throw", lambda *a, **k: (_ for _ in ()).throw(Exception("throw")))
+    monkeypatch.setattr(
+        frappe, "throw", lambda *a, **k: (_ for _ in ()).throw(Exception("throw"))
+    )
     with pytest.raises(Exception):
         service_report_hooks.validate(doc)
