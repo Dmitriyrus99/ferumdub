@@ -10,7 +10,6 @@ app_email = "support@ferum.ru"
 app_license = "MIT"
 
 
-
 to_populate: list[str] = []
 
 
@@ -21,7 +20,10 @@ get_notification_config = "ferum_customs.config.notifications"
 fixtures = [
     "custom_fields",
     "custom_docperm",
-    {"dt": "Role", "filters": [["name", "in", ["Custom Role"]]]},
+    {
+        "dt": "Role",
+        "filters": [["name", "in", ["Проектный менеджер", "Инженер", "Заказчик"]]],
+    },
     {"dt": "Workflow", "filters": [["name", "in", ["Workflow Service Request"]]]},
     "service_report_workflow",
 ]
