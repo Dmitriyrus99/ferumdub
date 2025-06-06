@@ -15,7 +15,13 @@ to_populate: list[str] = []
 
 doc_events = DOC_EVENTS
 
-get_notification_config = "ferum_customs.config.notifications"
+# Path to the function returning Notification config.
+# The previous value pointed to a non-existing module and caused
+# `bench` to fail loading notification settings. Use the actual
+# location inside ``ferum_customs.notifications``.
+get_notification_config = (
+    "ferum_customs.notifications.notifications.get_notification_config"
+)
 
 fixtures = [
     "custom_fields",
@@ -31,6 +37,7 @@ fixtures = [
     "service_object",
     "service_request",
     "service_report",
+    "notification",
     "portal_menu_item",
     "User",
 ]
