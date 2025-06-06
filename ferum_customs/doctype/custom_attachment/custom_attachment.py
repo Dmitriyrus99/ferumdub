@@ -54,11 +54,11 @@ class CustomAttachment(Document):
 
     def _validate_parent_references(self) -> None:
         """
-        Проверяет, что указана хотя бы одна родительская ссылка (на ServiceRequest, ServiceReport и т.д.),
+        Проверяет, что указана хотя бы одна родительская ссылка (на service_request, ServiceReport и т.д.),
         и что эти ссылки указывают на существующие документы.
         """
         parent_fields_map = {
-            "parent_reference_sr": "ServiceRequest",
+            "parent_reference_sr": "service_request",
             "parent_reference_srep": "ServiceReport",
             "parent_reference_so": "ServiceObject",
         }

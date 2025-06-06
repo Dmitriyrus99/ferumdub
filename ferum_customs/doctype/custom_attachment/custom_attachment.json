@@ -13,7 +13,7 @@
             "fieldname": "parent_reference_sr",
             "label": "Parent Service Request",
             "fieldtype": "Link",
-            "options": "ServiceRequest"
+            "options": "service_request"
         },
         {
             "fieldname": "parent_reference_srep",

@@ -1,4 +1,5 @@
 # ferum_customs/ferum_customs/doctype/service_request/test_service_request.py
+# ruff: noqa: E402
 import pytest
 
 pytest.importorskip("frappe")  # noqa: E402,F401
@@ -115,7 +116,7 @@ class TestServiceRequest(unittest.TestCase):
         frappe.db.rollback()
 
     def create_service_request_doc(self, status=STATUS_OTKRYTA, submit_doc=False):
-        sr = frappe.new_doc("ServiceRequest")
+        sr = frappe.new_doc("service_request")
         sr.subject = "Test SR - " + frappe.generate_hash(length=5)
         # Используем custom_ префиксы
         sr.custom_customer = self.test_customer_name
@@ -146,8 +147,8 @@ class TestServiceRequest(unittest.TestCase):
         self.assertEqual(sr.custom_customer, self.test_customer_name)
         self.assertEqual(sr.custom_service_object_link, self.actual_test_so_name)
 
-        # Проверяем, что custom_project подтянулся (логика в ServiceRequest.before_save)
-        fetched_sr = frappe.get_doc("ServiceRequest", sr.name)
+        # Проверяем, что custom_project подтянулся (логика в service_request.before_save)
+        fetched_sr = frappe.get_doc("service_request", sr.name)
         self.assertEqual(fetched_sr.custom_project, self.actual_test_sp_name)
 
     def test_validate_vyapolnena_requires_linked_report(self):
@@ -170,7 +171,7 @@ class TestServiceRequest(unittest.TestCase):
         self.assertIn(self.test_engineer_user_email, engineers)
 
     def test_sr_controller_internal_methods_with_custom_fields(self):
-        sr_doc = frappe.new_doc("ServiceRequest")
+        sr_doc = frappe.new_doc("service_request")
         sr_doc.subject = " Test Subject for Cleaning "
         # Даты
         sr_doc.planned_start_datetime = now_datetime()
@@ -217,7 +218,7 @@ class TestServiceRequest(unittest.TestCase):
 
         self.assertIn(self.test_pm_user_email, kwargs.get("recipients"))
         self.assertIn(sr.name, kwargs.get("subject"))
-        self.assertEqual(kwargs.get("reference_doctype"), "ServiceRequest")
+        self.assertEqual(kwargs.get("reference_doctype"), "service_request")
         self.assertEqual(kwargs.get("reference_name"), sr.name)
         # Проверка, что custom_customer используется в сообщении, если он есть
         if sr.custom_customer:

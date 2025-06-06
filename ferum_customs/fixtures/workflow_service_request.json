@@ -1,8 +1,8 @@
 {
   "doctype": "Workflow",
   "name": "Service Request Workflow",
-  "workflow_name": "ServiceRequest Flow",
-  "document_type": "ServiceRequest",
+  "workflow_name": "service_request Flow",
+  "document_type": "service_request",
   "workflow_state_field": "status",
   "is_active": 1,
   "send_email_alert": 0,

@@ -1,6 +1,6 @@
 # ferum_customs/ferum_customs/doctype/service_request/service_request.py
 """
-Python-контроллер для DocType "ServiceRequest".
+Python-контроллер для DocType "service_request".
 """
 from __future__ import annotations
 from typing import TYPE_CHECKING

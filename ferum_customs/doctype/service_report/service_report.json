@@ -10,7 +10,7 @@
             "fieldname": "service_request",
             "label": "Service Request",
             "fieldtype": "Link",
-            "options": "ServiceRequest",
+            "options": "service_request",
             "reqd": 1,
             "in_list_view": 1
         },

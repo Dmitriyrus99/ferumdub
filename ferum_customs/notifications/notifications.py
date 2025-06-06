@@ -19,9 +19,9 @@ def get_notification_config() -> dict:
     Возвращает конфигурацию для стандартных уведомлений Frappe.
     """
     return {
-        "ServiceRequest": {
+        "service_request": {
             # Условие для срабатывания уведомления:
-            # Отправлять, когда ServiceRequest находится в одном из указанных статусов.
+            # Отправлять, когда service_request находится в одном из указанных статусов.
             "condition": f"doc.status in ['{STATUS_OTKRYTA}', '{STATUS_V_RABOTE}']",
             # Получатели:
             "send_to_roles": [ROLE_PROEKTNYJ_MENEDZHER],
@@ -39,7 +39,7 @@ def get_notification_config() -> dict:
 {% if doc.custom_service_object_link %}Объект обслуживания: {{ doc.custom_service_object_link }} {% endif %}
 {% if doc.custom_assigned_engineer %}Назначенный инженер: {{ frappe.get_cached_value("User", doc.custom_assigned_engineer, "full_name") or doc.custom_assigned_engineer }} {% endif %}
 
-Пожалуйста, просмотрите заявку: {{ frappe.utils.get_link_to_form('ServiceRequest', doc.name) }}
+Пожалуйста, просмотрите заявку: {{ frappe.utils.get_link_to_form('service_request', doc.name) }}
 
 Спасибо.
 """

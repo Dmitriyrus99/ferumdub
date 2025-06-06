@@ -85,7 +85,7 @@ class ServiceReport(Document):
         if self.get("service_request") and not self.get("customer"):
             try:
                 customer_from_sr = frappe.db.get_value(
-                    "ServiceRequest", self.service_request, "custom_customer"
+                    "service_request", self.service_request, "custom_customer"
                 )
 
                 if customer_from_sr:
@@ -96,7 +96,7 @@ class ServiceReport(Document):
                     )
             except Exception as e:
                 frappe.logger(__name__).error(
-                    f"Error setting customer from ServiceRequest '{self.service_request}' for ServiceReport '{self.name}': {e}",
+                    f"Error setting customer from service_request '{self.service_request}' for ServiceReport '{self.name}': {e}",
                     exc_info=True,
                 )
         elif (

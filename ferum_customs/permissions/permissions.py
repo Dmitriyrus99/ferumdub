@@ -26,7 +26,7 @@ def get_service_request_pqc(user: Optional[str] = None) -> Optional[PQCCondition
         user_doc = frappe.get_cached_doc("User", user)
     except frappe.DoesNotExistError:
         frappe.logger(__name__).warning(
-            f"User '{user}' not found while applying PQC for ServiceRequest."
+            f"User '{user}' not found while applying PQC for service_request."
         )
         return {"name": ("=", f"__no_records_user_not_found_{user}")}
 
@@ -44,7 +44,7 @@ def get_service_request_pqc(user: Optional[str] = None) -> Optional[PQCCondition
 
     if is_customer_role and user_linked_customer:
         # Пользователь с ролью "Заказчик" и привязанным клиентом видит только заявки своего клиента.
-        # ServiceRequest теперь имеет поле custom_customer
+        # service_request теперь имеет поле custom_customer
         return {"custom_customer": user_linked_customer}
 
     return None
