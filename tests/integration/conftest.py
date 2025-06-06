@@ -20,7 +20,9 @@ def _wait_for_site(url: str, timeout: int = 120) -> None:
 def frappe_site_container():
     if shutil.which("docker") is None:
         pytest.skip("docker not available")
-    subprocess.check_call(["docker", "compose", "-f", "docker-compose.yml", "up", "-d", "--build"])
+    subprocess.check_call(
+        ["docker", "compose", "-f", "docker-compose.yml", "up", "-d", "--build"]
+    )
     try:
         _wait_for_site("http://localhost:8000/api/method/ping")
         yield "http://localhost:8000"

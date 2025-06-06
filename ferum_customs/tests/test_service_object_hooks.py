@@ -17,7 +17,9 @@ class DummyDoc:
 def test_validate_unique(monkeypatch):
     doc = DummyDoc("SN-1")
     monkeypatch.setattr(frappe.db, "exists", lambda *args, **kwargs: None)
-    monkeypatch.setattr(frappe, "throw", lambda *a, **k: (_ for _ in ()).throw(Exception("throw")))
+    monkeypatch.setattr(
+        frappe, "throw", lambda *a, **k: (_ for _ in ()).throw(Exception("throw"))
+    )
     # Should not raise
     service_object_hooks.validate(doc)
 
@@ -33,4 +35,3 @@ def test_validate_duplicate(monkeypatch):
 
     with pytest.raises(Exception):
         service_object_hooks.validate(doc)
-

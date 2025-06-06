@@ -59,4 +59,3 @@ def validate(doc: "ServiceObject", method: str | None = None) -> None:
     # Например, проверка связанных полей, форматов и т.д.
     # if doc.installation_date and doc.installation_date > frappe.utils.today():
     #     frappe.throw(_("Дата установки не может быть в будущем."))
-

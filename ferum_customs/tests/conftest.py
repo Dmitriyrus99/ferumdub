@@ -14,7 +14,9 @@ def frappe_site(tmp_path_factory):
     cwd = os.getcwd()
     os.chdir(site_path)
     try:
-        new_site(site_name, admin_password="admin", mariadb_root_password="root", quiet=True)
+        new_site(
+            site_name, admin_password="admin", mariadb_root_password="root", quiet=True
+        )
         frappe.init(site=site_name, sites_path=str(site_path))
         frappe.connect(site=site_name)
         yield site_name
@@ -22,4 +24,3 @@ def frappe_site(tmp_path_factory):
         frappe.destroy()
         os.chdir(cwd)
         shutil.rmtree(site_path)
-

@@ -28,7 +28,9 @@ def test_get_engineers_missing(monkeypatch):
     class DoesNotExist(Exception):
         pass
 
-    monkeypatch.setattr(service_request_hooks.frappe, "DoesNotExistError", DoesNotExist, raising=False)
+    monkeypatch.setattr(
+        service_request_hooks.frappe, "DoesNotExistError", DoesNotExist, raising=False
+    )
 
     def raise_missing(*a, **k):
         raise DoesNotExist
