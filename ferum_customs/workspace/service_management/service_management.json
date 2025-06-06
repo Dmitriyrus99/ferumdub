@@ -1,0 +1,23 @@
+{
+ "charts": [],
+ "content": "[]",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "dashboard",
+ "idx": 0,
+ "is_hidden": 0,
+ "label": "Service Management",
+ "links": [],
+ "module": "Ferum Customs",
+ "owner": "Administrator",
+ "public": 1,
+ "sequence_id": 0.0,
+ "shortcuts": [
+  {"label": "Service Request Overview", "link_to": "Service Request Overview", "type": "Report"},
+  {"label": "Engineer Workload", "link_to": "Engineer Workload", "type": "Report"}
+ ],
+ "title": "Service Management"
+}
