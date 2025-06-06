@@ -14,6 +14,9 @@
   "allow_rename": 1,
   "naming_series": "SR-.YYYY.-.#####",
   "title_field": "subject",
+  "has_web_view": 1,
+  "web_view_title_field": "subject",
+  "web_view_search_fields": ["subject", "status"],
   "workflow_name": "Service Request Workflow",
   "fields": [
     {
