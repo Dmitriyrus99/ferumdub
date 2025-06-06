@@ -11,6 +11,18 @@
 * MariaDB и Redis
 * Linux/Unix‑подобная система (рекомендуется)
 
+Перед запуском скрипта `dev_bootstrap.sh` убедитесь, что Redis установлен и запущен. Его можно установить следующей командой:
+
+```bash
+sudo apt update && sudo apt install -y redis-server
+redis-server --version
+sudo systemctl status redis
+sudo systemctl enable redis
+sudo systemctl start redis
+```
+
+После установки и запуска Redis повторно выполните `./dev_bootstrap.sh`.
+
 ## Быстрый старт
 
 ```bash

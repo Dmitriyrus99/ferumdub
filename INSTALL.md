@@ -18,6 +18,16 @@
    ```
 4. **Права доступа**
    - Запускайте скрипт установки от пользователя с правами `sudo`, чтобы он мог устанавливать системные зависимости.
+5. **Установите Redis-сервер**
+   - Frappe использует Redis для фоновых задач и кеша. Установите и запустите его:
+   ```bash
+   sudo apt update && sudo apt install -y redis-server
+   redis-server --version
+   sudo systemctl status redis
+   sudo systemctl enable redis
+   sudo systemctl start redis
+   ```
+   - После старта Redis повторно запустите скрипт `./dev_bootstrap.sh`.
 
 ## Автоматическая установка
 
