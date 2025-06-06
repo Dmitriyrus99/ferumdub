@@ -70,6 +70,34 @@ coverage run -m pytest
 coverage report -m
 ```
 
+## Установка и настройка Codex
+
+Codex CLI помогает автоматизировать работу с репозиторием. Установите утилиту и создайте конфигурационный файл на конечном сервере.
+
+```bash
+npm install -g @openai/codex
+```
+
+Пример `~/.codex/config.yaml`:
+
+```yaml
+model: o4-mini
+approvalMode: suggest
+fullAutoErrorMode: ask-user
+notify: true
+providers:
+  - name: OpenAI
+    baseURL: https://api.openai.com/v1
+    envKey: OPENAI_API_KEY
+```
+
+Экспортируйте API-ключ:
+
+```bash
+export OPENAI_API_KEY="<ваш-ключ>"
+```
+
+После настройки запустите `codex` в каталоге проекта. Подробности в [docs/CODEX_SETUP.md](docs/CODEX_SETUP.md).
 ## Поддержка
 
 Вопросы и предложения можно оставлять в [issue‑трекере](https://github.com/Dmitriyrus99/ferumdub/issues).
