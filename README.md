@@ -55,7 +55,7 @@ ferum_customs/
 install-dev.sh             # создание виртуального окружения
 dev_bootstrap.sh           # автоматическое развёртывание Bench
 Makefile                   # часто используемые команды
-fixtures/                  # демонстрационные данные
+ferum_customs/fixtures/ # демонстрационные данные
 ```
 
 ## Команды Makefile
