@@ -2,7 +2,7 @@
 """Хуки для DocType *ServiceReport*.
 
 * Проверяем корректность привязки к заявке (validate).
-* После отправки отчёта обновляем связанную `ServiceRequest`
+* После отправки отчёта обновляем связанную `service_request`
   через `on_submit`.
 """
 from __future__ import annotations
@@ -47,19 +47,19 @@ def validate(doc: "ServiceReport", method: str | None = None) -> None:
         )
 
     # Проверяем, существует ли такая заявка, чтобы избежать ошибок при get_value
-    if not frappe.db.exists("ServiceRequest", doc.service_request):
+    if not frappe.db.exists("service_request", doc.service_request):
         frappe.throw(
             _(
                 "Связанная заявка на обслуживание (Service Request) '{0}' не найдена."
             ).format(doc.service_request)
         )
 
-    req_status = frappe.db.get_value("ServiceRequest", doc.service_request, "status")
+    req_status = frappe.db.get_value("service_request", doc.service_request, "status")
 
     if req_status is None:
         # Этого не должно произойти, если frappe.db.exists прошло, но для надежности
         frappe.logger(__name__).error(
-            f"Could not retrieve status for ServiceRequest '{doc.service_request}' linked to ServiceReport '{doc.name}'."
+            f"Could not retrieve status for service_request '{doc.service_request}' linked to ServiceReport '{doc.name}'."
         )
         frappe.throw(
             _(
@@ -82,10 +82,10 @@ def validate(doc: "ServiceReport", method: str | None = None) -> None:
 
 def on_submit(doc: "ServiceReport", method: str | None = None) -> None:
     """
-    После отправки (submit) отчёта обновляет связанную ServiceRequest.
+    После отправки (submit) отчёта обновляет связанную service_request.
 
     Действия:
-    1. Записывает ссылку на этот отчёт в поле `custom_linked_report` связанной ServiceRequest.
+    1. Записывает ссылку на этот отчёт в поле `custom_linked_report` связанной service_request.
        (Имя поля берётся из константы FIELD_CUSTOM_LINKED_REPORT и должно совпадать с fixtures).
     2. Убеждается, что статус связанной заявки установлен в «Выполнена».
 
@@ -104,7 +104,7 @@ def on_submit(doc: "ServiceReport", method: str | None = None) -> None:
     try:
         REPORT_LINK_FIELD_ON_REQUEST = FIELD_CUSTOM_LINKED_REPORT
 
-        req: "ServiceRequest" = frappe.get_doc("ServiceRequest", doc.service_request)
+        req: "ServiceRequest" = frappe.get_doc("service_request", doc.service_request)
 
         changed_fields = {}
 
@@ -118,7 +118,7 @@ def on_submit(doc: "ServiceReport", method: str | None = None) -> None:
         # `validate` должен был уже обеспечить, что статус `STATUS_VYPOLNENA`.
         if req.status != STATUS_VYPOLNENA:
             changed_fields["status"] = STATUS_VYPOLNENA
-            # Если вы также хотите обновить дату выполнения ServiceRequest здесь:
+            # Если вы также хотите обновить дату выполнения service_request здесь:
             # if req.meta.has_field("completed_on") and not req.get("completed_on"):
             #     from frappe.utils import now
             #     changed_fields["completed_on"] = now()
@@ -127,10 +127,10 @@ def on_submit(doc: "ServiceReport", method: str | None = None) -> None:
             # Обновляем поля без вызова save(), чтобы избежать рекурсивных хуков и воркфлоу, если не требуется
             # Используем db_set для submitted документов, если это возможно и логично
             # req.db_set(changed_fields, notify=True) # notify=True может быть полезно для обновления UI
-            # Альтернативно, если нужны хуки ServiceRequest (кроме on_submit/on_update):
+            # Альтернативно, если нужны хуки service_request (кроме on_submit/on_update):
             for field, value in changed_fields.items():
                 req.set(field, value)
-            req.save(ignore_permissions=True)  # Сохраняем изменения в ServiceRequest.
+            req.save(ignore_permissions=True)  # Сохраняем изменения в service_request.
 
             frappe.msgprint(
                 _("Связанная заявка на обслуживание {0} была обновлена.").format(
@@ -140,18 +140,18 @@ def on_submit(doc: "ServiceReport", method: str | None = None) -> None:
                 alert=True,
             )
             frappe.logger(__name__).info(
-                f"ServiceRequest '{req.name}' updated from ServiceReport '{doc.name}'. Changes: {changed_fields}"
+                f"service_request '{req.name}' updated from ServiceReport '{doc.name}'. Changes: {changed_fields}"
             )
 
     except frappe.DoesNotExistError:
         frappe.logger(__name__).error(
-            f"ServiceRequest '{doc.service_request}' linked in ServiceReport '{doc.name}' not found during on_submit.",
+            f"service_request '{doc.service_request}' linked in ServiceReport '{doc.name}' not found during on_submit.",
             exc_info=True,
         )
         # Можно рассмотреть frappe.throw, если это критическая ошибка
     except Exception as e:
         frappe.logger(__name__).error(
-            f"Error updating linked ServiceRequest '{doc.service_request}' from ServiceReport '{doc.name}': {e}",
+            f"Error updating linked service_request '{doc.service_request}' from ServiceReport '{doc.name}': {e}",
             exc_info=True,
         )
         frappe.throw(

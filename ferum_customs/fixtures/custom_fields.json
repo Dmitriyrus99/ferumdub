@@ -1,8 +1,8 @@
 [
   {
     "doctype": "Custom Field",
-    "name": "ServiceRequest-custom_customer",
-    "dt": "ServiceRequest",
+    "name": "service_request-custom_customer",
+    "dt": "service_request",
     "fieldname": "custom_customer",
     "label": "Клиент",
     "fieldtype": "Link",
@@ -14,8 +14,8 @@
   },
   {
     "doctype": "Custom Field",
-    "name": "ServiceRequest-custom_service_object_link",
-    "dt": "ServiceRequest",
+    "name": "service_request-custom_service_object_link",
+    "dt": "service_request",
     "fieldname": "custom_service_object_link",
     "label": "Объект обслуживания",
     "fieldtype": "Link",
@@ -25,8 +25,8 @@
   },
   {
     "doctype": "Custom Field",
-    "name": "ServiceRequest-custom_assigned_engineer",
-    "dt": "ServiceRequest",
+    "name": "service_request-custom_assigned_engineer",
+    "dt": "service_request",
     "fieldname": "custom_assigned_engineer",
     "label": "Назначенный инженер",
     "fieldtype": "Link",
@@ -36,8 +36,8 @@
   },
   {
     "doctype": "Custom Field",
-    "name": "ServiceRequest-custom_project",
-    "dt": "ServiceRequest",
+    "name": "service_request-custom_project",
+    "dt": "service_request",
     "fieldname": "custom_project",
     "label": "Проект",
     "fieldtype": "Link",
@@ -48,8 +48,8 @@
   },
   {
     "doctype": "Custom Field",
-    "name": "ServiceRequest-custom_linked_report",
-    "dt": "ServiceRequest",
+    "name": "service_request-custom_linked_report",
+    "dt": "service_request",
     "fieldname": "custom_linked_report",
     "label": "Связанный отчет",
     "fieldtype": "Link",

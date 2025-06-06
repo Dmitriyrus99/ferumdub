@@ -1,12 +1,12 @@
 // ferum_customs/ferum_customs/doctype/service_request/service_request.js
 /**
- * Клиентский скрипт для DocType "ServiceRequest".
+ * Клиентский скрипт для DocType "service_request".
  * Содержит общую логику фильтрации инженеров и специфичные действия формы.
  */
 
-frappe.ui.form.on('ServiceRequest', {
+frappe.ui.form.on('service_request', {
     onload: function(frm) {
-        // console.log("ServiceRequest DocType-specific JS: Form loaded:", frm.docname);
+        // console.log("service_request DocType-specific JS: Form loaded:", frm.docname);
     },
 
     /**
@@ -77,10 +77,10 @@ frappe.ui.form.on('ServiceRequest', {
             }
         }
 
-        // Специфичные действия формы ServiceRequest
+        // Специфичные действия формы service_request
         if (frm.doc.docstatus === 0 && frm.doc.status === 'Открыта') {
             frm.add_custom_button(__('Назначить инженера (SR Specific)'), function() {
-                frappe.msgprint(__('Логика назначения инженера, специфичная для формы ServiceRequest...'));
+                frappe.msgprint(__('Логика назначения инженера, специфичная для формы service_request...'));
             }, __('Действия'));
         }
 
@@ -95,7 +95,7 @@ frappe.ui.form.on('ServiceRequest', {
     },
 
     validate: function(frm) {
-        // console.log("ServiceRequest DocType-specific JS: Client-side validation...");
+        // console.log("service_request DocType-specific JS: Client-side validation...");
         return true;
     }
 });

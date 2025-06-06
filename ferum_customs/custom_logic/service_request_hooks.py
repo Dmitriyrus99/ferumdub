@@ -1,5 +1,5 @@
 # ferum_customs/ferum_customs/custom_logic/service_request_hooks.py
-"""Хуки для DocType *ServiceRequest*."""
+"""Хуки для DocType *service_request*."""
 
 from __future__ import annotations
 from typing import TYPE_CHECKING, List
@@ -31,7 +31,7 @@ if TYPE_CHECKING:
 
 def validate(doc: "ServiceRequest", method: str | None = None) -> None:
     """
-    Вызывается Frappe перед сохранением `ServiceRequest`.
+    Вызывается Frappe перед сохранением `service_request`.
     Проверяем бизнес-правила.
     """
     if doc.status == STATUS_VYPOLNENA and not doc.get(FIELD_CUSTOM_LINKED_REPORT):
@@ -48,7 +48,7 @@ def validate(doc: "ServiceRequest", method: str | None = None) -> None:
             doc.completed_on = now()
         else:
             frappe.logger(__name__).warning(
-                f"ServiceRequest: {doc.name}. Field 'completed_on' is missing in DocType, but validation logic expects it."
+                f"service_request: {doc.name}. Field 'completed_on' is missing in DocType, but validation logic expects it."
             )
 
     if doc.get(FIELD_CUSTOM_PROJECT) and not doc.get(FIELD_CUSTOM_CUSTOMER):
@@ -104,7 +104,7 @@ def prevent_deletion_with_links(
 
 @frappe.whitelist()
 def get_engineers_for_object(service_object_name: str) -> List[str]:
-    # Эта функция принимает имя объекта, а не документ ServiceRequest, поэтому здесь нет изменений fieldname
+    # Эта функция принимает имя объекта, а не документ service_request, поэтому здесь нет изменений fieldname
     if not service_object_name:
         return []
 
@@ -181,7 +181,7 @@ def _notify_project_manager(doc: "ServiceRequest") -> None:
 
         message_body = "\n".join(message_body_parts)
 
-        link_to_request = frappe.utils.get_link_to_form("ServiceRequest", doc.name)
+        link_to_request = frappe.utils.get_link_to_form("service_request", doc.name)
 
         message = "<p>{}</p><p><a href='{}'>{}</a></p>".format(
             message_body.replace("\n", "<br>"),
@@ -193,16 +193,16 @@ def _notify_project_manager(doc: "ServiceRequest") -> None:
             recipients=recipients,
             subject=subject,
             message=message,
-            reference_doctype="ServiceRequest",
+            reference_doctype="service_request",
             reference_name=doc.name,
             now=True,
         )
         frappe.logger(__name__).info(
-            f"Sent closure notification for ServiceRequest '{doc.name}' to project managers."
+            f"Sent closure notification for service_request '{doc.name}' to project managers."
         )
 
     except Exception as e:
         frappe.logger(__name__).error(
-            f"Failed to send closure notification for ServiceRequest '{doc.name}': {e}",
+            f"Failed to send closure notification for service_request '{doc.name}': {e}",
             exc_info=True,
         )

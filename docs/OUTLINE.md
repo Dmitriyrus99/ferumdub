@@ -3,14 +3,14 @@
 ## Architecture
 - **API Layer (`ferum_customs/api.py`)** - whitelisted functions for Ajax calls and integrations.
 - **Hooks (`ferum_customs/hooks.py` & `custom_hooks.py`)** - maps DocType events to logic in `custom_logic`.
-- **Doctypes (`ferum_customs/doctype/`)** - ServiceRequest, ServiceReport, PayrollEntryCustom and others.
+- **Doctypes (`ferum_customs/doctype/`)** - service_request, ServiceReport, PayrollEntryCustom and others.
 - **Custom Logic (`ferum_customs/custom_logic/`)** - validation and business rules used by hooks.
 - **Permissions (`ferum_customs/permissions/`)** - dynamic permission filters.
 - **Patches (`ferum_customs/patches/`)** - migration scripts applied with `bench migrate`.
 
 ## Data Flow
 ```
-ServiceRequest --> ServiceReport --> PayrollEntryCustom
+service_request --> ServiceReport --> PayrollEntryCustom
 ```
 A service request is created and progressed through a workflow. Once work is completed, a ServiceReport is submitted and linked back to the request. PayrollEntryCustom records are created from approved reports.
 
