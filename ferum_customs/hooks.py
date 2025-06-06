@@ -26,4 +26,15 @@ fixtures = [
     },
     {"dt": "Workflow", "filters": [["name", "in", ["Workflow Service Request"]]]},
     "service_report_workflow",
+    "customer",
+    "service_project",
+    "service_object",
+    "service_request",
+    "service_report",
+    "User",
 ]
+
+try:
+    from .dev_hooks import *  # noqa: F401,F403
+except ImportError:
+    pass

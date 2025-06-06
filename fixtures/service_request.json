@@ -1,0 +1,8 @@
+[
+  {
+    "doctype": "service_request",
+    "service_object": "Демо Объект",
+    "subject": "Первая заявка",
+    "status": "Открыта"
+  }
+]

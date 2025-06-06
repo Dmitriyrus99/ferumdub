@@ -11,27 +11,24 @@
 * MariaDB и Redis
 * Linux/Unix‑подобная система (рекомендуется)
 
-## Установка
+## Быстрый старт
 
 ```bash
 # загрузите репозиторий
 git clone https://github.com/Dmitriyrus99/ferumdub.git
 cd ferumdub
 
-# подготовьте окружение и создайте сайт
-bash bootstrap.sh
+# установка Python зависимостей
+./install-dev.sh
+
+# автоматическое развёртывание Bench и сайта
+./dev_bootstrap.sh
 ```
 
-Скрипт инициализирует каталог `frappe-bench`, создаёт сайт `dev.localhost` и устанавливает приложение `ferum_customs`.
-
-После выполнения вы можете запустить Bench и перейти в систему:
-
-```bash
-cd frappe-bench
-bench start
-```
-
-Затем откройте в браузере `http://localhost:8000` и войдите под учётной записью **Administrator** с паролем `admin`.
+После запуска `dev_bootstrap.sh` каталог `frappe-bench` будет инициализирован,
+создан сайт `dev.localhost` и установлено приложение `ferum_customs`. Сервер
+Bench запустится автоматически и будет доступен по адресу
+`http://localhost:8000` (пользователь **Administrator**, пароль `admin`).
 
 ## Работа с репозиторием
 
@@ -55,15 +52,33 @@ ferum_customs/
 ├── doctype/               # определения DocType
 ├── patches/               # скрипты миграций
 ├── tests/                 # autotests
-bootstrap.sh               # установка окружения
-setup.sh                   # пример развертывания ERPNext 15
+install-dev.sh             # создание виртуального окружения
+dev_bootstrap.sh           # автоматическое развёртывание Bench
+Makefile                   # часто используемые команды
+fixtures/                  # демонстрационные данные
 ```
+
+## Команды Makefile
+
+Основные задачи автоматизированы через `make`:
+
+| Цель      | Описание                                                  |
+|-----------|-----------------------------------------------------------|
+| `setup`   | Установка приложения и миграция базы на тестовом сайте    |
+| `start`   | Запуск сервера разработки (`bench start`)                 |
+| `update`  | Применение миграций, сборка бандлов и перезапуск Bench    |
+| `fixtures`| Экспорт текущих фикстур                                   |
+| `test`    | Запуск тестов для приложения `ferum_customs`              |
+
+Для локальной отладки можно создать файл `ferum_customs/dev_hooks.py` и
+дополнить или переопределить стандартные хуки приложения. Этот файл игнорируется
+если отсутствует.
 
 ## Разработка и тесты
 
 ```bash
-pip install -r dev-requirements.txt
-bash bootstrap.sh  # инициализация Bench и создание тестового сайта
+./install-dev.sh
+./dev_bootstrap.sh
 pre-commit run --all-files
 # запуск unit-тестов с отчётом покрытия
 coverage run -m pytest
