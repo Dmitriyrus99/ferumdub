@@ -5,6 +5,7 @@
 """
 
 from __future__ import annotations
+
 import os
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -17,6 +18,52 @@ if TYPE_CHECKING:
 
 # Получаем экземпляр логгера Frappe для текущего модуля
 logger = frappe.logger(__name__)
+
+
+def _resolve_attachment_path(file_url: str, is_private: bool) -> tuple[Path, Path, str]:
+    """Validate ``file_url`` and return the resolved attachment path, base dir and safe name."""
+    base_folder = "private" if is_private else "public"
+    prefix = f"/{base_folder}/files/" if is_private else "/files/"
+
+    if not file_url.startswith(prefix):
+        msg = (
+            _("Некорректный URL приватного файла: {0}")
+            if is_private
+            else _("Некорректный URL публичного файла: {0}")
+        )
+        raise frappe.ValidationError(msg.format(file_url))
+
+    relative = file_url[len(prefix) :]
+    safe_name = os.path.basename(relative)
+    if safe_name != relative or not safe_name or safe_name in (".", ".."):
+        logger.error(
+            "Path traversal attempt or invalid character in file_url '%s'. Original relative: '%s', Basename: '%s'",
+            file_url,
+            relative,
+            safe_name,
+        )
+        raise frappe.PermissionError(
+            _("Недопустимое имя файла или попытка обхода пути.")
+        )
+
+    base_dir = Path(frappe.get_site_path(base_folder, "files")).resolve(strict=True)
+    file_path = (base_dir / safe_name).resolve()
+
+    is_safe_path = (
+        file_path.is_relative_to(base_dir)
+        if hasattr(Path, "is_relative_to")
+        else str(file_path).startswith(str(base_dir))
+    )
+    if not is_safe_path:
+        logger.error(
+            "Path traversal attempt or incorrect path resolution for attachment URL: '%s'. Resolved path: '%s', Base dir: '%s'",
+            file_url,
+            file_path,
+            base_dir,
+        )
+        raise frappe.PermissionError(_("Неверный путь вложения. Доступ запрещен."))
+
+    return file_path, base_dir, safe_name
 
 
 @frappe.whitelist()
@@ -40,85 +87,32 @@ def delete_attachment_file_from_filesystem(
     """
     if not file_url or not isinstance(file_url, str):
         logger.warning(
-            f"delete_attachment_file_from_filesystem: Invalid file_url provided: {file_url}"
+            "delete_attachment_file_from_filesystem: Invalid file_url provided: %s",
+            file_url,
         )
         raise frappe.ValidationError(_("Некорректный URL файла вложения."))
 
     try:
-        # frappe.get_site_path() возвращает абсолютный путь
-        if is_private:
-            base_folder = "private"
-            # file_url должен начинаться с /private/files/
-            if not file_url.startswith(f"/{base_folder}/files/"):
-                raise frappe.ValidationError(
-                    _("Некорректный URL приватного файла: {0}").format(file_url)
-                )
-            relative_path_to_file = file_url[len(f"/{base_folder}/files/") :]
-        else:
-            base_folder = "public"
-            # file_url должен начинаться с /files/
-            if not file_url.startswith("/files/"):
-                raise frappe.ValidationError(
-                    _("Некорректный URL публичного файла: {0}").format(file_url)
-                )
-            relative_path_to_file = file_url[len("/files/") :]
-
-        # os.path.basename для дополнительной защиты от ../ в relative_path_to_file
-        safe_name = os.path.basename(relative_path_to_file)
-        if (
-            safe_name != relative_path_to_file
-            or not safe_name
-            or safe_name in (".", "..")
-        ):
-            logger.error(
-                f"Path traversal attempt or invalid character in file_url '{file_url}'. "
-                f"Original relative: '{relative_path_to_file}', Basename: '{safe_name}'"
-            )
-            raise frappe.PermissionError(
-                _("Недопустимое имя файла или попытка обхода пути.")
-            )
-
-        # Полный абсолютный путь к ожидаемой папке files сайта.
-        # .resolve() нормализует путь. strict=True вызовет ошибку, если путь не существует.
-        base_dir = Path(frappe.get_site_path(base_folder, "files")).resolve(strict=True)
-
-        # Конструируем полный путь к файлу и также нормализуем его.
-        file_path = (base_dir / safe_name).resolve()
-
+        file_path, base_dir, safe_name = _resolve_attachment_path(file_url, is_private)
     except FileNotFoundError:
         logger.warning(
-            f"Base directory for attachments ('{base_folder}/files') not found or path is incorrect. "
-            f"Site path: '{frappe.get_site_path(base_folder, 'files')}', File URL: '{file_url}'",
-            exc_info=True,  # Логируем traceback
+            "Base directory for attachments ('%s/files') not found or path is incorrect. Site path: '%s', File URL: '%s'",
+            "private" if is_private else "public",
+            frappe.get_site_path("private" if is_private else "public", "files"),
+            file_url,
+            exc_info=True,
         )
-        # Не выбрасываем ошибку, если папка просто не существует, так как файл тоже не будет существовать
-        # Но это может быть признаком проблемы с настройкой сайта.
-        # Frappe обычно сам создает эти папки.
-        return  # Файл и так не существует
-    except Exception as e:
+        return
+    except Exception as e:  # noqa: BLE001
         logger.error(
-            f"Error resolving paths for attachment URL '{file_url}': {e}", exc_info=True
+            "Error resolving paths for attachment URL '%s': %s",
+            file_url,
+            e,
+            exc_info=True,
         )
         raise frappe.PermissionError(
             _("Ошибка при определении пути к файлу. Обратитесь к администратору.")
         )
-
-    # Убедиться, что вычисленный и нормализованный путь к файлу
-    # действительно начинается с пути к разрешенной базовой директории.
-    # Это вторая линия защиты от Path Traversal.
-    # hasattr для совместимости с Python < 3.9
-    is_safe_path = (
-        file_path.is_relative_to(base_dir)
-        if hasattr(Path, "is_relative_to")
-        else str(file_path).startswith(str(base_dir))
-    )
-
-    if not is_safe_path:
-        logger.error(
-            f"Path traversal attempt or incorrect path resolution for attachment URL: '{file_url}'. "
-            f"Resolved path: '{file_path}', Base dir: '{base_dir}'"
-        )
-        raise frappe.PermissionError(_("Неверный путь вложения. Доступ запрещен."))
 
     if not file_path.exists():
         logger.info(
