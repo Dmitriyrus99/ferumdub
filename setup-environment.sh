@@ -31,6 +31,16 @@ sudo apt-get install -y \
     redis-server \
     curl \
     build-essential
+=======
+sudo apt-get install -y git python3 python3-venv python3-dev \
+    mariadb-server redis-server curl build-essential
+
+# Install Node.js 18 from NodeSource (includes npm)
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+# Install Yarn globally using npm to avoid package conflicts
+sudo npm install -g yarn
 
 # Install bench CLI if not present
 if ! command -v bench >/dev/null 2>&1; then
