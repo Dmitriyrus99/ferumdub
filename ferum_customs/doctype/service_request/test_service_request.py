@@ -5,7 +5,7 @@ import pytest
 try:
     import frappe  # noqa: F401
     from frappe.tests.utils import FrappeTestCase
-    from frappe.utils import add_days, get_first_day, get_last_day, now_datetime, today
+    from frappe.utils import add_days, now_datetime
 except Exception:  # pragma: no cover
     pytest.skip("frappe not available", allow_module_level=True)
 
@@ -14,9 +14,9 @@ from ferum_customs.constants import (
     STATUS_VYPOLNENA,
     STATUS_OTKRYTA,
     STATUS_ZAKRYTA,
-    ROLE_PROEKTNYJ_MENEDZHER,
-    ROLE_INZHENER,
 )
+
+pytestmark = pytest.mark.usefixtures("frappe_site")
 
 # Constants used in tests. FrappeTestCase will provide matching fixtures.
 TEST_CUSTOMER_NAME = "_Test Customer for SR Tests"
@@ -152,4 +152,3 @@ class TestServiceRequest(FrappeTestCase):
         # Проверка, что custom_customer используется в сообщении, если он есть
         if sr.custom_customer:
             self.assertIn(self.test_customer_name, kwargs.get("message"))
-

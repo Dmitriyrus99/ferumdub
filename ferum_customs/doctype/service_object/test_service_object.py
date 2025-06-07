@@ -7,6 +7,9 @@ except Exception:  # pragma: no cover
     pytest.skip("frappe not available", allow_module_level=True)
 
 
+pytestmark = pytest.mark.usefixtures("frappe_site")
+
+
 class TestServiceObject(FrappeTestCase):
     def test_description_trim(self):
         doc = frappe.new_doc("Service Object")
