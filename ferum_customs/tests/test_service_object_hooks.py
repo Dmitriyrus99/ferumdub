@@ -2,10 +2,13 @@ import pytest
 
 try:
     import frappe
+    from frappe.tests.utils import FrappeTestCase
 except Exception:  # pragma: no cover - frappe not installed
     pytest.skip("frappe not available", allow_module_level=True)
 
 from ferum_customs.custom_logic import service_object_hooks
+
+pytestmark = pytest.mark.usefixtures("frappe_site")
 
 
 class DummyDoc:
@@ -17,24 +20,24 @@ class DummyDoc:
         return getattr(self, key, None)
 
 
-def test_validate_unique(monkeypatch):
-    doc = DummyDoc("SN-1")
-    monkeypatch.setattr(frappe.db, "exists", lambda *args, **kwargs: None)
-    monkeypatch.setattr(
-        frappe, "throw", lambda *a, **k: (_ for _ in ()).throw(Exception("throw"))
-    )
-    # Should not raise
-    service_object_hooks.validate(doc)
-
-
-def test_validate_duplicate(monkeypatch):
-    doc = DummyDoc("SN-1")
-    monkeypatch.setattr(frappe.db, "exists", lambda *a, **k: "SO-0002")
-
-    def fake_throw(msg, *a, **k):
-        raise Exception(msg)
-
-    monkeypatch.setattr(frappe, "throw", fake_throw)
-
-    with pytest.raises(Exception):
+class TestServiceObjectHooks(FrappeTestCase):
+    def test_validate_unique(self, monkeypatch):
+        doc = DummyDoc("SN-1")
+        monkeypatch.setattr(frappe.db, "exists", lambda *args, **kwargs: None)
+        monkeypatch.setattr(
+            frappe, "throw", lambda *a, **k: (_ for _ in ()).throw(Exception("throw"))
+        )
+        # Should not raise
         service_object_hooks.validate(doc)
+
+    def test_validate_duplicate(self, monkeypatch):
+        doc = DummyDoc("SN-1")
+        monkeypatch.setattr(frappe.db, "exists", lambda *a, **k: "SO-0002")
+
+        def fake_throw(msg, *a, **k):
+            raise Exception(msg)
+
+        monkeypatch.setattr(frappe, "throw", fake_throw)
+
+        with pytest.raises(Exception):
+            service_object_hooks.validate(doc)

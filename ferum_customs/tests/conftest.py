@@ -1,3 +1,4 @@
+import inspect
 import os
 import shutil
 
@@ -20,9 +21,18 @@ def frappe_site(tmp_path_factory):
     cwd = os.getcwd()
     os.chdir(site_path)
     try:
-        new_site(
-            site_name, admin_password="admin", mariadb_root_password="root", quiet=True
-        )
+        params = inspect.signature(new_site).parameters
+        kwargs = {
+            "admin_password": "admin",
+            "db_root_password": "root",
+            "db_root_username": "root",
+            "quiet": True,
+        }
+        if "db_root_password" not in params:
+            kwargs.pop("db_root_password")
+            kwargs.pop("db_root_username")
+            kwargs["mariadb_root_password"] = "root"
+        new_site(site_name, **{k: v for k, v in kwargs.items() if k in params})
         frappe.init(site=site_name, sites_path=str(site_path))
         frappe.connect(site=site_name)
         yield site_name
