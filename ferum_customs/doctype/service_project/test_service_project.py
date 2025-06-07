@@ -1,14 +1,13 @@
-import unittest
-
 import pytest
 
 try:
     import frappe
+    from frappe.tests.utils import FrappeTestCase
 except Exception:  # pragma: no cover
     pytest.skip("frappe not available", allow_module_level=True)
 
 
-class TestServiceProject(unittest.TestCase):
+class TestServiceProject(FrappeTestCase):
     def test_date_validation(self):
         doc = frappe.new_doc("Service Project")
         doc.start_date = frappe.utils.now_datetime()

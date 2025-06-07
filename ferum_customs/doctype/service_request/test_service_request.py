@@ -1,9 +1,10 @@
-import unittest
 from unittest.mock import patch  # Для мокирования frappe.sendmail
+
 import pytest
 
 try:
     import frappe  # noqa: F401
+    from frappe.tests.utils import FrappeTestCase
     from frappe.utils import add_days, get_first_day, get_last_day, now_datetime, today
 except Exception:  # pragma: no cover
     pytest.skip("frappe not available", allow_module_level=True)
@@ -17,94 +18,22 @@ from ferum_customs.constants import (
     ROLE_INZHENER,
 )
 
+# Constants used in tests. FrappeTestCase will provide matching fixtures.
+TEST_CUSTOMER_NAME = "_Test Customer for SR Tests"
+TEST_ENGINEER_USER_EMAIL = "test_sr_engineer_ferum@example.com"
+TEST_PM_USER_EMAIL = "test_sr_pm_ferum@example.com"
+TEST_SP_NAME_FIELD = "_Test SP for SR Tests"
+ACTUAL_TEST_SP_NAME = TEST_SP_NAME_FIELD
+ACTUAL_TEST_SO_NAME = "_Test SO for SR Tests"
 
-class TestServiceRequest(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        # Создание ролей, если их нет
-        for role_name in [ROLE_PROEKTNYJ_MENEDZHER, ROLE_INZHENER]:
-            if not frappe.db.exists("Role", role_name):
-                frappe.get_doc({"doctype": "Role", "role_name": role_name}).insert(
-                    ignore_if_duplicate=True
-                )
 
-        cls.test_customer_name = "_Test Customer for SR Tests"
-        if not frappe.db.exists("Customer", cls.test_customer_name):
-            frappe.get_doc(
-                {
-                    "doctype": "Customer",
-                    "customer_name": cls.test_customer_name,
-                    "customer_type": "Individual",
-                }
-            ).insert(ignore_if_duplicate=True)
-
-        cls.test_engineer_user_email = "test_sr_engineer_ferum@example.com"
-        if not frappe.db.exists("User", cls.test_engineer_user_email):
-            user = frappe.get_doc(
-                {
-                    "doctype": "User",
-                    "email": cls.test_engineer_user_email,
-                    "first_name": "TestSR",
-                    "last_name": "Engineer",
-                    "send_welcome_email": 0,
-                }
-            )
-            user.add_roles(ROLE_INZHENER)  # Используем метод add_roles
-            user.insert(ignore_if_duplicate=True)
-
-        cls.test_pm_user_email = "test_sr_pm_ferum@example.com"
-        if not frappe.db.exists("User", cls.test_pm_user_email):
-            user = frappe.get_doc(
-                {
-                    "doctype": "User",
-                    "email": cls.test_pm_user_email,
-                    "first_name": "TestSR",
-                    "last_name": "PM",
-                    "send_welcome_email": 0,
-                }
-            )
-            user.add_roles(ROLE_PROEKTNYJ_MENEDZHER)  # Используем метод add_roles
-            user.insert(ignore_if_duplicate=True)
-
-        # Создание ServiceProject
-        cls.test_sp_name_field = (
-            "_Test SP for SR Tests"  # Уникальное имя для project_name
-        )
-        sp_doc = frappe.db.exists(
-            "ServiceProject", {"project_name": cls.test_sp_name_field}
-        )
-        if not sp_doc:
-            sp = frappe.get_doc(
-                {
-                    "doctype": "ServiceProject",
-                    "project_name": cls.test_sp_name_field,
-                    "customer": cls.test_customer_name,  # Предполагаем, что ServiceProject имеет поле customer
-                    "start_date": get_first_day(today()),
-                    "end_date": get_last_day(today()),
-                }
-            )
-            sp.insert(ignore_permissions=True, ignore_if_duplicate=True)
-            cls.actual_test_sp_name = sp.name  # Это имя документа (ID)
-        else:
-            cls.actual_test_sp_name = sp_doc
-
-        # Создание ServiceObject
-        # Для ServiceObject может быть автоименование, поэтому лучше получать имя после создания
-        so = frappe.new_doc("ServiceObject")
-        so.customer = cls.test_customer_name
-        so.linked_service_project = (
-            cls.actual_test_sp_name
-        )  # Связываем с ServiceProject
-        so.append(
-            "assigned_engineers",
-            {
-                "engineer": cls.test_engineer_user_email,
-                "assignment_date": now_datetime(),
-            },
-        )
-        # so.object_name = "_Test SO for SR Tests" # Если есть такое поле и оно уникально
-        so.insert(ignore_permissions=True)
-        cls.actual_test_so_name = so.name  # Это имя документа (ID)
+class TestServiceRequest(FrappeTestCase):
+    test_customer_name = TEST_CUSTOMER_NAME
+    test_engineer_user_email = TEST_ENGINEER_USER_EMAIL
+    test_pm_user_email = TEST_PM_USER_EMAIL
+    test_sp_name_field = TEST_SP_NAME_FIELD
+    actual_test_sp_name = ACTUAL_TEST_SP_NAME
+    actual_test_so_name = ACTUAL_TEST_SO_NAME
 
     def setUp(self):
         frappe.db.savepoint()
@@ -224,16 +153,3 @@ class TestServiceRequest(unittest.TestCase):
         if sr.custom_customer:
             self.assertIn(self.test_customer_name, kwargs.get("message"))
 
-    @classmethod
-    def tearDownClass(cls):
-        # Опционально: удалить тестовые данные, созданные в setUpClass
-        # Это полезно, чтобы не загрязнять БД, но может замедлить тесты.
-        # Frappe rollback в tearDown каждого теста обычно достаточен для тестовых данных, создаваемых в самом тесте.
-        # frappe.delete_doc("Customer", cls.test_customer_name, force=True, ignore_missing=True)
-        # frappe.delete_doc("User", cls.test_engineer_user_email, force=True, ignore_missing=True)
-        # frappe.delete_doc("User", cls.test_pm_user_email, force=True, ignore_missing=True)
-        # if hasattr(cls, 'actual_test_so_name'):
-        #     frappe.delete_doc("ServiceObject", cls.actual_test_so_name, force=True, ignore_missing=True)
-        # if hasattr(cls, 'actual_test_sp_name'):
-        #     frappe.delete_doc("ServiceProject", cls.actual_test_sp_name, force=True, ignore_missing=True)
-        pass
