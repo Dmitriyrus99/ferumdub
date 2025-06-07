@@ -1,60 +1,40 @@
 import os
 import pytest
+import subprocess
 import frappe
 
 @pytest.fixture(scope="session")
 def frappe_test_context():
     """
-    Эта фикстура создает полноценный тестовый сайт Frappe один раз за сессию,
-    устанавливает необходимые приложения и корректно очищает окружение после тестов.
+    Создает полноценный тестовый сайт Frappe один раз за сессию.
     """
-    frappe.flags.in_test = True
     test_site_name = "test_site"
-
-    # Запоминаем текущую директорию и переходим во временную
     cwd = os.getcwd()
-    sites_path = os.getcwd()
-    os.chdir(sites_path)
 
     try:
-        # --- Создание сайта ---
-        # Уничтожаем предыдущий сайт, если он остался от неудачного запуска
-        frappe.destroy()
+        subprocess.run(["bench", "drop-site", test_site_name, "--force"], check=False)
+        subprocess.run([
+            "bench", "new-site", test_site_name,
+            "--admin-password", "admin",
+            "--mariadb-root-password", os.environ.get("MYSQL_ROOT_PASSWORD")
+        ], check=True)
 
-        # Создаем новый сайт с необходимыми параметрами
-        frappe.new_site(
-            test_site_name,
-            admin_password="admin",
-            mariadb_root_password=os.environ.get("MYSQL_ROOT_PASSWORD"),
-            install_apps=["erpnext", "ferum_customs"],
-            force=True,
-            reinstall=True,
-        )
+        subprocess.run(["bench", "use", test_site_name], check=True)
+        subprocess.run(["bench", "install-app", "erpnext"], check=True)
+        subprocess.run(["bench", "install-app", "ferum_customs"], check=True)
 
-        # --- Подключение к сайту ---
-        # Устанавливаем сайт как текущий глобальный контекст
-        frappe.connect(site=test_site_name)
+        frappe.init(site=test_site_name)
+        frappe.connect()
+        frappe.flags.in_test = True
 
-        # Передаем управление тестовой сессии
         yield
 
     finally:
-        # --- Очистка после тестов ---
-        # Завершаем соединение и полностью удаляем сайт и базу данных
         frappe.destroy()
-        # Возвращаемся в исходную директорию
+        subprocess.run(["bench", "drop-site", test_site_name, "--force"], check=True)
         os.chdir(cwd)
 
 @pytest.fixture(autouse=True)
 def use_frappe_test_context(frappe_test_context):
-    """
-    Эта фикстура автоматически применяется ко всем тестам
-    и обеспечивает их выполнение в созданном контексте.
-    """
-    # frappe.db.commit() можно использовать для чистого состояния перед каждым тестом
     yield
-    # frappe.db.rollback() откатывает изменения после каждого теста
     frappe.db.rollback()
-    и обеспечивает их выполнение в созданном контексте.
-    """
-    pass
