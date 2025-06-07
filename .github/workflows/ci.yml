@@ -17,6 +17,8 @@ jobs:
         run: |
           pip install -r dev-requirements.txt
           pip install pre-commit
+          pip install frappe-bench
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
       - name: Start bench stack
         run: docker compose -f docker-compose.yml up -d --build
       - name: Run pre-commit
