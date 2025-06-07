@@ -8,6 +8,7 @@ except Exception:  # pragma: no cover - frappe not installed
 
 from ferum_customs.custom_logic import service_object_hooks
 
+
 class DummyDoc:
     def __init__(self, serial_no, name="SO-0001"):
         self.serial_no = serial_no

@@ -9,6 +9,7 @@ except Exception:  # pragma: no cover - frappe not installed
 
 from ferum_customs.custom_logic import service_request_hooks
 
+
 class DummyEntry(SimpleNamespace):
     def get(self, key):
         return getattr(self, key, None)
