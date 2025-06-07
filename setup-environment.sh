@@ -7,10 +7,30 @@ FRAPPE_BRANCH="${FRAPPE_BRANCH:-version-15}"
 BENCH_DIR="${BENCH_DIR:-/home/frappe/frappe-bench}"
 APP_PATH="$(cd "$(dirname "$0")" && pwd)"
 
-# Update packages and install system dependencies
+# Update packages
 sudo apt-get update
-sudo apt-get install -y git python3 python3-venv python3-dev \
-    mariadb-server redis-server nodejs npm yarn curl build-essential
+
+# --- Установка Node.js, npm и Yarn ---
+echo "Installing Node.js v18 from NodeSource..."
+# Устанавливаем репозиторий NodeSource и сам Node.js (который включает npm)
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+# Устанавливаем Yarn глобально через npm
+sudo npm install -g yarn
+
+
+# --- Установка остальных системных зависимостей ---
+echo "Installing other system dependencies..."
+sudo apt-get install -y \
+    git \
+    python3 \
+    python3-venv \
+    python3-dev \
+    mariadb-server \
+    redis-server \
+    curl \
+    build-essential
 
 # Install bench CLI if not present
 if ! command -v bench >/dev/null 2>&1; then
