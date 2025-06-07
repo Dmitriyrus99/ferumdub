@@ -5,14 +5,14 @@ RUN apt-get update \
     && npm install -g yarn@1.22.19 \
     && useradd -ms /bin/bash frappe
 
+COPY bootstrap.sh /bootstrap.sh
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /bootstrap.sh /entrypoint.sh
+
 USER frappe
 WORKDIR /home/frappe
 
 RUN pip install --user frappe-bench \
     && ~/.local/bin/bench init frappe-bench --frappe-branch version-15 --skip-assets
-
-COPY bootstrap.sh /bootstrap.sh
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /bootstrap.sh /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
