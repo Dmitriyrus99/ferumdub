@@ -10,7 +10,14 @@ APP_PATH="$(cd "$(dirname "$0")" && pwd)"
 # Update packages and install system dependencies
 sudo apt-get update
 sudo apt-get install -y git python3 python3-venv python3-dev \
-    mariadb-server redis-server nodejs npm yarn curl build-essential
+    mariadb-server redis-server curl build-essential
+
+# Install Node.js 18 from NodeSource (includes npm)
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+# Install Yarn globally using npm to avoid package conflicts
+sudo npm install -g yarn
 
 # Install bench CLI if not present
 if ! command -v bench >/dev/null 2>&1; then
