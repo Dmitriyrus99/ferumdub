@@ -34,6 +34,7 @@ def frappe_site(tmp_path_factory):
         _new_site(None, site_name, **{k: v for k, v in kwargs.items() if k in params})
         frappe.init(site=site_name, sites_path=str(site_path))
         frappe.connect(site=site_name)
+        frappe.use_site(site_name)
         yield site_name
     finally:
         frappe.destroy()

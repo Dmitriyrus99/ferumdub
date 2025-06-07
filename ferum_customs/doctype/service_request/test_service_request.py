@@ -17,7 +17,6 @@ from ferum_customs.constants import (
 )
 
 
-
 # Constants used in tests. FrappeTestCase will provide matching fixtures.
 TEST_CUSTOMER_NAME = "_Test Customer for SR Tests"
 TEST_ENGINEER_USER_EMAIL = "test_sr_engineer_ferum@example.com"
