@@ -7,11 +7,8 @@ except Exception:  # pragma: no cover
     pytest.skip("frappe not available", allow_module_level=True)
 
 
-pytestmark = pytest.mark.usefixtures("frappe_site")
-
-
 class TestPayrollEntryCustom(FrappeTestCase):
-    def test_total_payable_rounding(self):
+    def test_total_payable_rounding(self, frappe_site):
         doc = frappe.new_doc("Payroll Entry Custom")
         doc.total_payable = 1234.567
         doc.validate()

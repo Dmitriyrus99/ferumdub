@@ -9,11 +9,8 @@ except Exception:  # pragma: no cover
 from ferum_customs import api
 
 
-pytestmark = pytest.mark.usefixtures("frappe_site")
-
-
 class TestAPI(FrappeTestCase):
-    def test_validate_service_request(self):
+    def test_validate_service_request(self, frappe_site):
         """Test validate_service_request method"""
         doc = api.validate_service_request("test_docname")
         self.assertIsNotNone(doc)

@@ -8,9 +8,6 @@ except Exception:  # pragma: no cover - frappe not installed
 
 from ferum_customs.custom_logic import service_object_hooks
 
-pytestmark = pytest.mark.usefixtures("frappe_site")
-
-
 class DummyDoc:
     def __init__(self, serial_no, name="SO-0001"):
         self.serial_no = serial_no
@@ -21,7 +18,7 @@ class DummyDoc:
 
 
 class TestServiceObjectHooks(FrappeTestCase):
-    def test_validate_unique(self, monkeypatch):
+    def test_validate_unique(self, monkeypatch, frappe_site):
         doc = DummyDoc("SN-1")
         monkeypatch.setattr(frappe.db, "exists", lambda *args, **kwargs: None)
         monkeypatch.setattr(
@@ -30,7 +27,7 @@ class TestServiceObjectHooks(FrappeTestCase):
         # Should not raise
         service_object_hooks.validate(doc)
 
-    def test_validate_duplicate(self, monkeypatch):
+    def test_validate_duplicate(self, monkeypatch, frappe_site):
         doc = DummyDoc("SN-1")
         monkeypatch.setattr(frappe.db, "exists", lambda *a, **k: "SO-0002")
 

@@ -7,9 +7,7 @@ except Exception:  # pragma: no cover - frappe not installed
     pytest.skip("frappe not available", allow_module_level=True)
 
 
-pytestmark = pytest.mark.usefixtures("frappe_site")
-
 
 class TestTestBasic(FrappeTestCase):
-    def test_basic(self):
+    def test_basic(self, frappe_site):
         self.assertTrue(True)
