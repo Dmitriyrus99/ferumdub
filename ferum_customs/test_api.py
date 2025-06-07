@@ -1,6 +1,10 @@
 import pytest
 
-pytest.importorskip("frappe")
+try:
+    import frappe  # noqa: F401
+except Exception:  # pragma: no cover
+    pytest.skip("frappe not available", allow_module_level=True)
+
 from ferum_customs import api
 
 

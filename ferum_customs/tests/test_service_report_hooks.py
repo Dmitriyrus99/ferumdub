@@ -1,8 +1,11 @@
+from types import SimpleNamespace
 import pytest
 
-pytest.importorskip("frappe")
-import frappe
-from types import SimpleNamespace
+try:
+    import frappe
+except Exception:  # pragma: no cover - frappe not installed
+    pytest.skip("frappe not available", allow_module_level=True)
+
 from ferum_customs.custom_logic import service_report_hooks
 from ferum_customs.constants import STATUS_VYPOLNENA
 

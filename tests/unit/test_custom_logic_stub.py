@@ -2,6 +2,7 @@ import sys
 import types
 from types import SimpleNamespace
 from pathlib import Path
+from typing import Any, cast
 import importlib
 import pytest
 
@@ -13,7 +14,7 @@ from ferum_customs import constants
 
 def make_frappe(tmp_path: Path):
     """Create a minimal stub of the frappe module for tests."""
-    frappe = types.ModuleType("frappe")
+    frappe = cast(Any, types.ModuleType("frappe"))
 
     class DummyLogger:
         def __init__(self, name=None):
