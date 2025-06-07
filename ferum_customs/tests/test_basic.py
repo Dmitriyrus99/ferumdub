@@ -1,8 +1,11 @@
+import unittest
+
 import pytest
 
-pytest.importorskip("frappe")  # noqa: E402,F401
-import frappe  # noqa: F401
-import unittest
+try:
+    import frappe  # noqa: F401
+except Exception:  # pragma: no cover - frappe not installed
+    pytest.skip("frappe not available", allow_module_level=True)
 
 
 class TestTestBasic(unittest.TestCase):

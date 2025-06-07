@@ -1,7 +1,10 @@
 import pytest
 
-pytest.importorskip("frappe")
-import frappe
+try:
+    import frappe
+except Exception:  # pragma: no cover - frappe not installed
+    pytest.skip("frappe not available", allow_module_level=True)
+
 from ferum_customs.custom_logic import service_object_hooks
 
 

@@ -1,9 +1,12 @@
+import re
+import unittest
+
 import pytest
 
-pytest.importorskip("frappe")
-import frappe
-import unittest
-import re
+try:
+    import frappe
+except Exception:  # pragma: no cover
+    pytest.skip("frappe not available", allow_module_level=True)
 
 
 class TestServiceReport(unittest.TestCase):

@@ -1,10 +1,16 @@
 import os
 import shutil
+
 import pytest
 
-pytest.importorskip("frappe")
-import frappe
-from frappe.installer import new_site
+try:
+    import frappe
+    from frappe.commands.site import new_site  # Frappe >=15
+except Exception:  # pragma: no cover - fallback for older versions
+    try:
+        from frappe.installer import new_site  # type: ignore
+    except Exception:  # pragma: no cover
+        pytest.skip("frappe not available", allow_module_level=True)
 
 
 @pytest.fixture(scope="session")

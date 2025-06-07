@@ -1,12 +1,12 @@
-# ferum_customs/ferum_customs/doctype/service_request/test_service_request.py
-# ruff: noqa: E402
-import pytest
-
-pytest.importorskip("frappe")  # noqa: E402,F401
-import frappe  # noqa: F401
 import unittest
 from unittest.mock import patch  # Для мокирования frappe.sendmail
-from frappe.utils import now_datetime, add_days, today, get_first_day, get_last_day
+import pytest
+
+try:
+    import frappe  # noqa: F401
+    from frappe.utils import add_days, get_first_day, get_last_day, now_datetime, today
+except Exception:  # pragma: no cover
+    pytest.skip("frappe not available", allow_module_level=True)
 
 # Импортируйте ваши константы
 from ferum_customs.constants import (
