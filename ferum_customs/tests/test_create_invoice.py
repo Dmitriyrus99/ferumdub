@@ -3,7 +3,11 @@ import pytest
 pytest.importorskip("frappe")
 import frappe  # noqa: E402
 from types import SimpleNamespace  # noqa: E402
+from frappe.tests.utils import FrappeTestCase  # noqa: E402
 from ferum_customs import api  # noqa: E402
+
+
+pytestmark = pytest.mark.usefixtures("frappe_site")
 
 
 class DummyDoc(SimpleNamespace):
@@ -18,38 +22,40 @@ class DummyDoc(SimpleNamespace):
         return getattr(self, key, default)
 
 
-def test_create_invoice_success(monkeypatch):
-    sr = DummyDoc(
-        name="SR-1",
-        customer="Cust",
-        work_items=[DummyDoc(description="Work", quantity=1, unit_price=10, amount=10)],
-    )
-    invoice = DummyDoc(items=[])
+class TestCreateInvoice(FrappeTestCase):
+    def test_create_invoice_success(self, monkeypatch):
+        sr = DummyDoc(
+            name="SR-1",
+            customer="Cust",
+            work_items=[
+                DummyDoc(description="Work", quantity=1, unit_price=10, amount=10)
+            ],
+        )
+        invoice = DummyDoc(items=[])
 
-    def fake_get_doc(*args, **kwargs):
-        if isinstance(args[0], dict):
-            invoice.customer = args[0].get("customer")
-            invoice.service_report = args[0].get("service_report")
-            return invoice
-        if args[0] == "Service Report":
-            return sr
-        raise ValueError
+        def fake_get_doc(*args, **kwargs):
+            if isinstance(args[0], dict):
+                invoice.customer = args[0].get("customer")
+                invoice.service_report = args[0].get("service_report")
+                return invoice
+            if args[0] == "Service Report":
+                return sr
+            raise ValueError
 
-    monkeypatch.setattr(frappe, "get_doc", fake_get_doc)
-    monkeypatch.setattr(frappe.db, "exists", lambda *a, **k: False)
-    monkeypatch.setattr(frappe, "has_permission", lambda *a, **k: True)
+        monkeypatch.setattr(frappe, "get_doc", fake_get_doc)
+        monkeypatch.setattr(frappe.db, "exists", lambda *a, **k: False)
+        monkeypatch.setattr(frappe, "has_permission", lambda *a, **k: True)
 
-    name = api.create_invoice_from_report("SR-1")
-    assert name == "INV-1"
-    assert invoice.customer == sr.customer
-    assert invoice.service_report == "SR-1"
-    assert invoice.items[0]["qty"] == 1
+        name = api.create_invoice_from_report("SR-1")
+        self.assertEqual(name, "INV-1")
+        self.assertEqual(invoice.customer, sr.customer)
+        self.assertEqual(invoice.service_report, "SR-1")
+        self.assertEqual(invoice.items[0]["qty"], 1)
 
-
-def test_create_invoice_duplicate(monkeypatch):
-    monkeypatch.setattr(frappe.db, "exists", lambda *a, **k: True)
-    monkeypatch.setattr(
-        frappe, "throw", lambda *a, **k: (_ for _ in ()).throw(Exception("throw"))
-    )
-    with pytest.raises(Exception):
-        api.create_invoice_from_report("SR-1")
+    def test_create_invoice_duplicate(self, monkeypatch):
+        monkeypatch.setattr(frappe.db, "exists", lambda *a, **k: True)
+        monkeypatch.setattr(
+            frappe, "throw", lambda *a, **k: (_ for _ in ()).throw(Exception("throw"))
+        )
+        with pytest.raises(Exception):
+            api.create_invoice_from_report("SR-1")
