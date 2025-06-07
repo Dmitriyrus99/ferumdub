@@ -1,14 +1,13 @@
-import unittest
-
 import pytest
 
 try:
     import frappe
+    from frappe.tests.utils import FrappeTestCase
 except Exception:  # pragma: no cover
     pytest.skip("frappe not available", allow_module_level=True)
 
 
-class TestServiceObject(unittest.TestCase):
+class TestServiceObject(FrappeTestCase):
     def test_description_trim(self):
         doc = frappe.new_doc("Service Object")
         doc.linked_service_project = " PROJECT001 "

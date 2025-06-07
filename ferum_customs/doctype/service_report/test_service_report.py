@@ -1,15 +1,14 @@
 import re
-import unittest
-
 import pytest
 
 try:
     import frappe
+    from frappe.tests.utils import FrappeTestCase
 except Exception:  # pragma: no cover
     pytest.skip("frappe not available", allow_module_level=True)
 
 
-class TestServiceReport(unittest.TestCase):
+class TestServiceReport(FrappeTestCase):
     def test_basic(self):
         doc = frappe.new_doc("Service Report")
         doc.service_request = " TEST123 "
