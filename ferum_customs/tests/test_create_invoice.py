@@ -7,9 +7,6 @@ from frappe.tests.utils import FrappeTestCase  # noqa: E402
 from ferum_customs import api  # noqa: E402
 
 
-pytestmark = pytest.mark.usefixtures("frappe_site")
-
-
 class DummyDoc(SimpleNamespace):
     def append(self, field, value):
         getattr(self, field).append(value)
@@ -23,7 +20,7 @@ class DummyDoc(SimpleNamespace):
 
 
 class TestCreateInvoice(FrappeTestCase):
-    def test_create_invoice_success(self, monkeypatch):
+    def test_create_invoice_success(self, monkeypatch, frappe_site):
         sr = DummyDoc(
             name="SR-1",
             customer="Cust",
@@ -52,7 +49,7 @@ class TestCreateInvoice(FrappeTestCase):
         self.assertEqual(invoice.service_report, "SR-1")
         self.assertEqual(invoice.items[0]["qty"], 1)
 
-    def test_create_invoice_duplicate(self, monkeypatch):
+    def test_create_invoice_duplicate(self, monkeypatch, frappe_site):
         monkeypatch.setattr(frappe.db, "exists", lambda *a, **k: True)
         monkeypatch.setattr(
             frappe, "throw", lambda *a, **k: (_ for _ in ()).throw(Exception("throw"))

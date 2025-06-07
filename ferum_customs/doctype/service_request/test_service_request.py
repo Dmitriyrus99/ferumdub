@@ -16,7 +16,7 @@ from ferum_customs.constants import (
     STATUS_ZAKRYTA,
 )
 
-pytestmark = pytest.mark.usefixtures("frappe_site")
+
 
 # Constants used in tests. FrappeTestCase will provide matching fixtures.
 TEST_CUSTOMER_NAME = "_Test Customer for SR Tests"
@@ -71,7 +71,7 @@ class TestServiceRequest(FrappeTestCase):
                     raise
         return sr
 
-    def test_sr_creation_and_custom_fields(self):
+    def test_sr_creation_and_custom_fields(self, frappe_site):
         sr = self.create_service_request_doc()
         self.assertEqual(sr.custom_customer, self.test_customer_name)
         self.assertEqual(sr.custom_service_object_link, self.actual_test_so_name)
@@ -80,7 +80,7 @@ class TestServiceRequest(FrappeTestCase):
         fetched_sr = frappe.get_doc("service_request", sr.name)
         self.assertEqual(fetched_sr.custom_project, self.actual_test_sp_name)
 
-    def test_validate_vyapolnena_requires_linked_report(self):
+    def test_validate_vyapolnena_requires_linked_report(self, frappe_site):
         sr = self.create_service_request_doc(status=STATUS_OTKRYTA, submit_doc=True)
         sr.status = STATUS_VYPOLNENA  # Имитируем изменение статуса
         # sr.custom_linked_report = None # Убедимся, что поле пустое (оно и так будет None для нового SR)
@@ -91,7 +91,7 @@ class TestServiceRequest(FrappeTestCase):
         ):
             sr.save()  # save вызовет validate
 
-    def test_hook_get_engineers_for_object(self):
+    def test_hook_get_engineers_for_object(self, frappe_site):
         from ferum_customs.custom_logic.service_request_hooks import (
             get_engineers_for_object,
         )
@@ -99,7 +99,7 @@ class TestServiceRequest(FrappeTestCase):
         engineers = get_engineers_for_object(self.actual_test_so_name)
         self.assertIn(self.test_engineer_user_email, engineers)
 
-    def test_sr_controller_internal_methods_with_custom_fields(self):
+    def test_sr_controller_internal_methods_with_custom_fields(self, frappe_site):
         sr_doc = frappe.new_doc("service_request")
         sr_doc.subject = " Test Subject for Cleaning "
         # Даты
@@ -129,7 +129,7 @@ class TestServiceRequest(FrappeTestCase):
         self.assertAlmostEqual(sr_doc.duration_hours, 12.0, places=2)
 
     @patch("frappe.sendmail")  # Мокируем функцию frappe.sendmail
-    def test_notify_project_manager_on_close(self, mock_sendmail_func):
+    def test_notify_project_manager_on_close(self, mock_sendmail_func, frappe_site):
         sr = self.create_service_request_doc(status=STATUS_OTKRYTA, submit_doc=True)
 
         # Имитируем изменение статуса на Закрыта

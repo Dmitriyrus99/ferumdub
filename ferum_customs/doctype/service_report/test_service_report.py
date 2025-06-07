@@ -8,11 +8,8 @@ except Exception:  # pragma: no cover
     pytest.skip("frappe not available", allow_module_level=True)
 
 
-pytestmark = pytest.mark.usefixtures("frappe_site")
-
-
 class TestServiceReport(FrappeTestCase):
-    def test_basic(self):
+    def test_basic(self, frappe_site):
         doc = frappe.new_doc("Service Report")
         doc.service_request = " TEST123 "
         doc.customer = " CUSTOMER1 "

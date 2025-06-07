@@ -7,11 +7,8 @@ except Exception:  # pragma: no cover
     pytest.skip("frappe not available", allow_module_level=True)
 
 
-pytestmark = pytest.mark.usefixtures("frappe_site")
-
-
 class TestAssignedEngineerItem(FrappeTestCase):
-    def test_assignment_date_format(self):
+    def test_assignment_date_format(self, frappe_site):
         doc = frappe.new_doc("Assigned Engineer Item")
         doc.engineer = " Engineer User "
         doc.assignment_date = frappe.utils.now_datetime()
