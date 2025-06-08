@@ -12,13 +12,9 @@ sudo apt-get update
 
 # --- Установка Node.js, npm и Yarn ---
 echo "Installing Node.js v18 from NodeSource..."
-# Устанавливаем репозиторий NodeSource и сам Node.js (который включает npm)
 curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
 sudo apt-get install -y nodejs
-
-# Устанавливаем Yarn глобально через npm
 sudo npm install -g yarn
-
 
 # --- Установка остальных системных зависимостей ---
 echo "Installing other system dependencies..."
@@ -31,17 +27,14 @@ sudo apt-get install -y \
     redis-server \
     curl \
     build-essential
-=======
-sudo apt-get install -y git python3 python3-venv python3-dev \
-    mariadb-server redis-server curl build-essential
 
-# Install Node.js 18 from NodeSource (includes npm)
-curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-sudo apt-get install -y nodejs
+# --- Настройка MariaDB для совместимости с Frappe Bench ---
+echo "Configuring MariaDB for Frappe Bench..."
+sudo mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD:-root}';"
+sudo mysql -u root -e "UPDATE mysql.user SET plugin = 'mysql_native_password' WHERE User = 'root';"
+sudo mysql -u root -e "FLUSH PRIVILEGES;"
 
-# Install Yarn globally using npm to avoid package conflicts
-sudo npm install -g yarn
-
+# --- Установка и настройка Frappe Bench ---
 # Install bench CLI if not present
 if ! command -v bench >/dev/null 2>&1; then
     sudo pip3 install frappe-bench
@@ -75,4 +68,3 @@ sudo -u frappe -H bench --site "$SITE_NAME" execute ferum_customs.install.after_
 
 echo "✅ Setup complete. Starting development server..."
 sudo -u frappe -H bench start
-
