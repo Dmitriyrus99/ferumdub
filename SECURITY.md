@@ -1,24 +1,20 @@
-# 😌  SECURITY.md
+# Политика безопасности
 
-## Security Overview
+## Меры безопасности
+- Все сервисы доступны только по HTTPS через Traefik.
+- Права доступа к резервным копиям ограничены владельцем.
+- Секреты хранятся в GitHub Secrets и файлах `.env`, которые не коммитятся в репозиторий.
 
-### Structural Security
+## Обновление приложения
+```bash
+git pull
+docker compose pull && docker compose up -d
+```
 
-- Authentication: based on Frappe/ERPNex roles and permissions
-- Roles used from fixtures: custom_docperm, custom_fields, roles, workflows
-- Filters implemented in hooks.py with permission_query_conditions to limit visibility
-
-### Data Protection
-- DocTypes configured with role/field/action permissions
-- Public access controlled via custom API and overrides
-- Attachment security via CustomAttachment
-
-### Audit Trails
-- Server-side auditing based on **audit.py**
-- Includes timestamped creation/editing info
-
-### Restrictions
-- No secret config in repos
-- Recommend to add .env to .gitignore
-- Enable SMTPS/SSL when deploying
-
+## Аудит
+Для проверки состояния системы и качества кода используйте:
+```bash
+bench doctor
+pre-commit run --all-files
+pytest
+```

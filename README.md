@@ -1,8 +1,19 @@
-# Ferum Customs для Frappe
+# Ferum Customs
 
-## Описание
+Ferum Customs — кастомное приложение для Frappe/ERPNext, предназначенное для автоматизации работы с сервисными заявками.
 
-`Ferum Customs` — модуль к ERPNext, который автоматизирует работу с сервисными заявками, отчётами и начислениями. Приложение расширяет стандартный функционал Frappe, добавляя удобные роли и механизмы контроля заявок.
+## Ключевые технологии
+- Frappe/ERPNext 15
+- Docker с docker-compose
+- Traefik для обратного прокси
+- PostgreSQL
+- CI/CD на GitHub Actions
+- Мониторинг и тестирование: Prometheus, Grafana, pre-commit, pytest
+
+## Быстрые ссылки
+- [Приложение](http://localhost:8000)
+- [Grafana](http://localhost:3000)
+- [Prometheus](http://localhost:9090)
 
 ## Требования
 
