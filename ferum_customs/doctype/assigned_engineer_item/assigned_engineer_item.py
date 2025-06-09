@@ -3,7 +3,6 @@
 Python-контроллер для дочернего DocType "AssignedEngineerItem".
 Этот DocType, вероятно, используется как таблица в другом документе (например, ServiceObject).
 """
-from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import datetime  # Для работы с датами и временем

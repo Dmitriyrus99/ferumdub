@@ -34,12 +34,12 @@ class TestServiceRequest(FrappeTestCase):
     actual_test_sp_name = ACTUAL_TEST_SP_NAME
     actual_test_so_name = ACTUAL_TEST_SO_NAME
 
-    def setUp(self):
+    def setup_method(self):
         frappe.db.savepoint()
         self.current_user_for_test = frappe.session.user
         frappe.set_user(self.test_pm_user_email)  # Действия от имени ПМ
 
-    def tearDown(self):
+    def teardown_method(self):
         frappe.set_user(self.current_user_for_test)
         frappe.db.rollback()
 

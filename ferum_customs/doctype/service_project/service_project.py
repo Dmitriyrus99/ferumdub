@@ -2,7 +2,6 @@
 """
 Python-контроллер для DocType "ServiceProject".
 """
-from __future__ import annotations
 
 # from typing import TYPE_CHECKING
 import datetime  # Для работы с датами и временем

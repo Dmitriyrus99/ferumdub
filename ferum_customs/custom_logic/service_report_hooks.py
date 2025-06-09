@@ -5,7 +5,6 @@
 * После отправки отчёта обновляем связанную `service_request`
   через `on_submit`.
 """
-from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import frappe

@@ -3,7 +3,6 @@
 Динамические условия для запросов разрешений (Permission Query Conditions).
 """
 
-from __future__ import annotations
 from typing import Dict, List, Union, Optional
 
 import frappe
