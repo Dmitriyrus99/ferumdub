@@ -3,7 +3,6 @@
 Python-контроллер для дочернего DocType "ProjectObjectItem".
 Этот DocType, вероятно, используется как таблица в ServiceProject.
 """
-from __future__ import annotations
 
 # from typing import TYPE_CHECKING
 

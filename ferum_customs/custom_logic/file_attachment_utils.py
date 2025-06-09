@@ -4,7 +4,6 @@
 Содержит функцию для безопасного удаления файлов вложений.
 """
 
-from __future__ import annotations
 
 import os
 from pathlib import Path
@@ -37,10 +36,8 @@ def _resolve_attachment_path(file_url: str, is_private: bool) -> tuple[Path, Pat
     safe_name = os.path.basename(relative)
     if safe_name != relative or not safe_name or safe_name in (".", ".."):
         logger.error(
-            "Path traversal attempt or invalid character in file_url '%s'. Original relative: '%s', Basename: '%s'",
-            file_url,
-            relative,
-            safe_name,
+            "Path traversal attempt or invalid character in file_url "
+            f"'{file_url}'. Original relative: '{relative}', Basename: '{safe_name}'"
         )
         raise frappe.PermissionError(
             _("Недопустимое имя файла или попытка обхода пути.")
@@ -56,10 +53,8 @@ def _resolve_attachment_path(file_url: str, is_private: bool) -> tuple[Path, Pat
     )
     if not is_safe_path:
         logger.error(
-            "Path traversal attempt or incorrect path resolution for attachment URL: '%s'. Resolved path: '%s', Base dir: '%s'",
-            file_url,
-            file_path,
-            base_dir,
+            "Path traversal attempt or incorrect path resolution for attachment URL: "
+            f"'{file_url}'. Resolved path: '{file_path}', Base dir: '{base_dir}'"
         )
         raise frappe.PermissionError(_("Неверный путь вложения. Доступ запрещен."))
 
@@ -96,18 +91,16 @@ def delete_attachment_file_from_filesystem(
         file_path, base_dir, safe_name = _resolve_attachment_path(file_url, is_private)
     except FileNotFoundError:
         logger.warning(
-            "Base directory for attachments ('%s/files') not found or path is incorrect. Site path: '%s', File URL: '%s'",
+            "Base directory for attachments ('%s/files') not found or path is incorrect."
+            f" Site path: '{frappe.get_site_path('private' if is_private else 'public', 'files')}',"
+            f" File URL: '{file_url}'",
             "private" if is_private else "public",
-            frappe.get_site_path("private" if is_private else "public", "files"),
-            file_url,
             exc_info=True,
         )
         return
     except Exception as e:  # noqa: BLE001
         logger.error(
-            "Error resolving paths for attachment URL '%s': %s",
-            file_url,
-            e,
+            f"Error resolving paths for attachment URL '{file_url}': {e}",
             exc_info=True,
         )
         raise frappe.PermissionError(

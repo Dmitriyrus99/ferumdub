@@ -7,4 +7,3 @@
 
 Whitelisted-функции из этого модуля могут быть вызваны с клиента через `frappe.call`.
 """
-from __future__ import annotations

@@ -1,7 +1,6 @@
 # ferum_customs/ferum_customs/custom_logic/service_object_hooks.py
 """Хуки для DocType *ServiceObject* – оборудование / объект обслуживания."""
 
-from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import frappe

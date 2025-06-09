@@ -104,3 +104,57 @@ def frappe_test_context():
 def use_frappe_test_context(frappe_test_context):
     yield
     frappe.db.rollback()
+
+
+from types import SimpleNamespace
+
+from ferum_customs.custom_logic import service_request_hooks
+
+
+class DummyEntry(SimpleNamespace):
+    """Helper entry object with ``get`` method for table rows."""
+
+    def get(self, key):
+        return getattr(self, key, None)
+
+
+@pytest.fixture()
+def engineers_doc():
+    """Return a dummy Service Object doc with assigned engineers."""
+
+    return SimpleNamespace(
+        assigned_engineers=[
+            DummyEntry(engineer="u1"),
+            DummyEntry(engineer="u1"),
+            DummyEntry(engineer="u2"),
+        ]
+    )
+
+
+@pytest.fixture()
+def patch_frappe_get_doc(monkeypatch, engineers_doc):
+    """Patch ``frappe.get_doc`` to return ``engineers_doc``."""
+
+    monkeypatch.setattr(frappe, "get_doc", lambda *a, **k: engineers_doc)
+    return engineers_doc
+
+
+@pytest.fixture()
+def patch_frappe_get_doc_missing(monkeypatch):
+    """Patch ``frappe.get_doc`` to raise ``DoesNotExistError``."""
+
+    class DoesNotExist(Exception):
+        pass
+
+    monkeypatch.setattr(
+        service_request_hooks.frappe,
+        "DoesNotExistError",
+        DoesNotExist,
+        raising=False,
+    )
+
+    def raise_missing(*_a, **_k):
+        raise DoesNotExist
+
+    monkeypatch.setattr(frappe, "get_doc", raise_missing)
+    return DoesNotExist
